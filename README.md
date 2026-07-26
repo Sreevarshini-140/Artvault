@@ -1,118 +1,449 @@
-# ArtVault — Luxury Digital Art Museum & Marketplace
+# ArtVault
 
-ArtVault is a full-stack portfolio project combining a virtual art museum, curated exhibitions, artist portfolios and an art-commerce workflow. It demonstrates React, Flask REST APIs, MySQL, JWT authentication, role-based authorization, search, pagination, wishlists, reviews, orders and dashboards.
+## Full-Stack Digital Art Marketplace and Virtual Exhibition Platform
 
-## Stack
-- Frontend: React + Vite + React Router + Axios + Lucide
-- Backend: Python + Flask + SQLAlchemy + JWT
-- Database: MySQL 8
-- Deployment-ready: Gunicorn, environment variables, production build
+ArtVault is a production-ready full-stack web application that enables artists to showcase and sell original artwork, collectors to discover and purchase art, and curators to create immersive virtual exhibitions. The platform combines a modern React frontend with a Flask REST API backend, MySQL database, secure JWT authentication, and role-based access control.
 
-## Roles
-- Visitor/Collector: browse, search, wishlist, review, follow artists, order products
-- Artist: visitor capabilities plus artwork portfolio management
-- Curator: create exhibitions and organize collections
-- Admin: platform statistics and unrestricted content management APIs
+**Live Demo**
 
-## Folder structure
+Frontend: https://artvault-ashen.vercel.app
+
+Backend API: https://artvault-production-d5e8.up.railway.app
+
+Repository: https://github.com/Sreevarshini-140/Artvault
+
+---
+
+# Project Overview
+
+ArtVault is designed as a modern online art marketplace that supports multiple user roles while providing an intuitive experience for browsing, purchasing, reviewing, and managing artwork.
+
+The project demonstrates production-level full-stack development using modern web technologies, secure authentication, RESTful APIs, responsive user interfaces, cloud deployment, and relational database design.
+
+---
+
+# Features
+
+## Public Users
+
+- Browse artwork collection
+- Search artworks
+- Filter and sort artworks
+- View artwork details
+- Explore artists
+- Browse exhibitions
+- Browse shop products
+- Register account
+- Login securely
+
+---
+
+## Collectors
+
+- Wishlist management
+- Follow artists
+- Shopping cart
+- Purchase artworks
+- View order history
+- Submit artwork reviews
+- Manage profile
+- View notifications
+
+---
+
+## Artists
+
+- Artist dashboard
+- Upload artworks
+- Manage portfolio
+- Edit artwork details
+- Delete artworks
+- Track portfolio performance
+- View followers
+- Manage profile
+
+---
+
+## Curators
+
+- Curator dashboard
+- Exhibition builder
+- Create exhibitions
+- Select artworks
+- Upload exhibition banner
+- Schedule exhibitions
+
+---
+
+## Administrators
+
+- User management
+- Reports dashboard
+- Platform monitoring
+- Content moderation
+- Administrative APIs
+
+---
+
+# Technology Stack
+
+## Frontend
+
+- React
+- Vite
+- React Router
+- Axios
+- Lucide React
+- CSS
+
+---
+
+## Backend
+
+- Python
+- Flask
+- Flask-JWT-Extended
+- SQLAlchemy
+- Werkzeug
+- Gunicorn
+
+---
+
+## Database
+
+- MySQL
+
+---
+
+## Deployment
+
+Frontend
+
+- Vercel
+
+Backend
+
+- Railway
+
+Database
+
+- Railway MySQL
+
+---
+
+# Architecture
+
 ```
-artvault/
-├── backend/
-│   ├── app/models, routes, utils
-│   ├── config.py
+                 React + Vite
+                      │
+                      │ REST API
+                      ▼
+              Flask REST Backend
+                      │
+        JWT Authentication
+                      │
+                      ▼
+              Railway MySQL Database
+```
+
+---
+
+# Application Modules
+
+## Public Pages
+
+- Home
+- Explore
+- Artwork Details
+- Artists
+- Artist Profile
+- Exhibitions
+- Exhibition Details
+- Shop
+- Login
+- Register
+
+---
+
+## User Features
+
+- Dashboard
+- Wishlist
+- Following
+- Orders
+- Notifications
+- Profile
+- Cart
+
+---
+
+## Artist Features
+
+- Upload Artwork
+- My Artworks
+- Artist Dashboard
+
+---
+
+## Curator Features
+
+- Curator Studio
+- Exhibition Builder
+
+---
+
+## Admin Features
+
+- User Management
+- Reports
+
+---
+
+# Folder Structure
+
+```
+ArtVault
+│
+├── backend
+│   ├── app
+│   │   ├── models
+│   │   ├── routes
+│   │   ├── utils
+│   │   ├── static
+│   │   └── uploads
+│   │
+│   ├── migrations
+│   ├── requirements.txt
 │   ├── run.py
-│   ├── seed.py
-│   └── requirements.txt
-├── frontend/
-│   ├── src/components, context, pages, services, styles
-│   └── package.json
-├── docs/API.md
-└── database.sql
+│   └── config.py
+│
+├── frontend
+│   ├── public
+│   ├── src
+│   │   ├── components
+│   │   ├── context
+│   │   ├── pages
+│   │   ├── services
+│   │   ├── styles
+│   │   └── utils
+│   │
+│   ├── package.json
+│   └── vite.config.js
+│
+├── docs
+│
+├── database.sql
+│
+└── README.md
 ```
 
-## 1. MySQL setup
-Create a MySQL database with either method:
+---
+
+# Installation
+
+## Clone Repository
+
 ```bash
-mysql -u root -p < database.sql
-```
-Or allow SQLAlchemy to create tables during seeding.
+git clone https://github.com/Sreevarshini-140/Artvault.git
 
-## 2. Backend setup
+cd Artvault
+```
+
+---
+
+# Backend Setup
+
 ```bash
 cd backend
+
 python -m venv venv
-# Windows
+```
+
+Windows
+
+```bash
 venv\Scripts\activate
-# macOS/Linux
+```
+
+Linux / macOS
+
+```bash
 source venv/bin/activate
+```
+
+Install dependencies
+
+```bash
 pip install -r requirements.txt
+```
+
+Create environment file
+
+```bash
 copy .env.example .env
 ```
-Edit `.env` with your MySQL password, then run:
+
+Configure
+
+- Database URL
+- JWT Secret
+- Secret Key
+- Frontend URL
+
+Run
+
 ```bash
 python seed.py
+
 python run.py
 ```
-API runs at `http://localhost:5000/api`.
 
-Demo accounts after seeding:
-- Admin: `admin@artvault.com` / `Admin@123`
-- Artist: `artist@artvault.com` / `Artist@123`
-- Curator: `curator@artvault.com` / `Curator@123`
+Backend runs at
 
-## 3. Frontend setup
+```
+http://127.0.0.1:5000
+```
+
+---
+
+# Frontend Setup
+
 ```bash
 cd frontend
+
 npm install
-copy .env.example .env
+
 npm run dev
 ```
-Open `http://localhost:5173`.
 
-## Production
-Backend:
-```bash
-gunicorn -w 4 -b 0.0.0.0:5000 run:app
+Frontend runs at
+
 ```
-Frontend:
-```bash
-npm run build
+http://localhost:5173
 ```
-Deploy `frontend/dist` to a static host and the Flask API to Render, Railway, AWS or another WSGI host. Restrict CORS to the final frontend domain and use strong secrets.
 
-## Security notes
-Passwords are hashed using Werkzeug. APIs enforce JWT identity and role checks. For real payment production, connect Stripe/Razorpay on the server, validate webhooks, add rate limiting, email verification, object storage uploads, CSRF protection where cookies are used, audit logs and automated tests.
+---
 
-## Included deliverables
-Complete frontend and backend source, MySQL schema, seed script, environment examples, README, REST API documentation and ZIP package.
+# Production Deployment
 
-## Application pages
+Frontend
 
-### Public
-- `/` Luxury landing page
-- `/explore` Artwork catalogue with search and pagination
-- `/artworks/:id` Artwork details
-- `/artists` Artist directory
-- `/exhibitions` Curated exhibitions
-- `/shop` Art products marketplace
-- `/cart` Shopping cart
-- `/login` Sign in
-- `/register` Account registration
+- Vercel
 
-### Authenticated users
-- `/dashboard` Role-aware dashboard
-- `/wishlist` Saved artworks
-- `/orders` Orders and invoices
-- `/notifications` Account notifications
-- `/profile` Profile settings
+Backend
 
-### Artist
-- `/artist/upload` Upload artwork
-- `/artist/artworks` Portfolio management
+- Railway
 
-### Curator
-- `/curator/studio` Exhibition builder
+Database
 
-### Administrator
-- `/admin/users` User management
-- `/admin/reports` Reports and moderation
+- Railway MySQL
+
+The application is fully deployed and accessible through the live demo.
+
+---
+
+# Authentication
+
+ArtVault uses
+
+- JWT Authentication
+- Password Hashing
+- Protected Routes
+- Role-Based Authorization
+
+Supported Roles
+
+- Visitor
+- Collector
+- Artist
+- Curator
+- Administrator
+
+---
+
+# Database
+
+Main entities include
+
+- Users
+- Artists
+- Artworks
+- Categories
+- Orders
+- Order Items
+- Reviews
+- Wishlist
+- Following
+- Exhibitions
+- Notifications
+
+---
+
+# Security Features
+
+- Password hashing
+- JWT authentication
+- Protected API endpoints
+- Role-based authorization
+- Secure file uploads
+- Environment variables
+- CORS configuration
+- Input validation
+
+---
+
+# Future Enhancements
+
+- Payment Gateway Integration
+- Email Verification
+- Password Reset
+- Artwork Recommendations
+- AI Artwork Search
+- Live Notifications
+- Cloud Image Storage
+- Analytics Dashboard
+- Auction System
+- Mobile Application
+
+---
+
+# Screenshots
+
+Screenshots of the application can be found in the `docs/` directory.
+
+Recommended screenshots:
+
+- Home
+- Explore
+- Artwork Details
+- Artists
+- Dashboard
+- Upload Artwork
+- My Artworks
+- Exhibitions
+- Cart
+- Orders
+
+---
+
+# Author
+
+**Prasangi Sree Varshini**
+
+B.Tech Computer Science and Engineering (Artificial Intelligence & Machine Learning)
+
+Raghu Engineering College
+
+LinkedIn
+
+https://linkedin.com/in/sree-varshini-prasangi-a40641341/
+
+GitHub
+
+https://github.com/Sreevarshini-140
+
+---
+
+# License
+
+This project was developed for educational and portfolio purposes.
