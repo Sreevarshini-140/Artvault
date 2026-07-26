@@ -1,25 +1,36 @@
-const BACKEND_URL = (
-  import.meta.env.VITE_BACKEND_URL ||
-  "http://127.0.0.1:5000"
-).replace(/\/$/, "");
+const API_BASE_URL =
+  import.meta.env.VITE_API_URL ||
+  "http://127.0.0.1:5000/api";
 
-export function getImageUrl(imageUrl) {
-  if (!imageUrl) {
+const BACKEND_BASE_URL =
+  API_BASE_URL.replace(/\/api\/?$/, "");
+
+export function getImageUrl(imagePath) {
+  if (!imagePath) {
     return "";
   }
 
+  // Replace old local URLs stored in the database.
   if (
-    imageUrl.startsWith("http://") ||
-    imageUrl.startsWith("https://") ||
-    imageUrl.startsWith("blob:") ||
-    imageUrl.startsWith("data:")
+    imagePath.startsWith("http://127.0.0.1:5000") ||
+    imagePath.startsWith("http://localhost:5000")
   ) {
-    return imageUrl;
+    const url = new URL(imagePath);
+    return `${BACKEND_BASE_URL}${url.pathname}`;
   }
 
-  const normalizedPath = imageUrl.startsWith("/")
-    ? imageUrl
-    : `/${imageUrl}`;
+  // Keep already-correct external URLs unchanged.
+  if (
+    imagePath.startsWith("http://") ||
+    imagePath.startsWith("https://")
+  ) {
+    return imagePath;
+  }
 
-  return `${BACKEND_URL}${normalizedPath}`;
+  // Handle relative paths from the backend.
+  const normalizedPath = imagePath.startsWith("/")
+    ? imagePath
+    : `/${imagePath}`;
+
+  return `${BACKEND_BASE_URL}${normalizedPath}`;
 }
