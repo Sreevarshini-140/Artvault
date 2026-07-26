@@ -69,17 +69,60 @@ export default function App() {
         <Routes>
           {/* PUBLIC ROUTES */}
 
-          <Route path="/" element={<Home />} />
-          <Route path="/explore" element={<Explore />} />
-          <Route path="/artworks/:id" element={<ArtworkDetail />} />
-          <Route path="/artists" element={<Artists />} />
-          <Route path="/artists/:id" element={<ArtistProfile />} />
-          <Route path="/exhibitions" element={<Exhibitions />} />
-          <Route path="/exhibitions/:slug" element={<ExhibitionDetail />} />
-          <Route path="/shop" element={<Shop />} />
-          <Route path="/cart" element={<Cart />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
+          <Route
+            path="/"
+            element={<Home />}
+          />
+
+          <Route
+            path="/explore"
+            element={<Explore />}
+          />
+
+          <Route
+            path="/artworks/:id"
+            element={<ArtworkDetail />}
+          />
+
+          <Route
+            path="/artists"
+            element={<Artists />}
+          />
+
+          <Route
+            path="/artists/:id"
+            element={<ArtistProfile />}
+          />
+
+          <Route
+            path="/exhibitions"
+            element={<Exhibitions />}
+          />
+
+          <Route
+            path="/exhibitions/:slug"
+            element={<ExhibitionDetail />}
+          />
+
+          <Route
+            path="/shop"
+            element={<Shop />}
+          />
+
+          <Route
+            path="/cart"
+            element={<Cart />}
+          />
+
+          <Route
+            path="/login"
+            element={<Login />}
+          />
+
+          <Route
+            path="/register"
+            element={<Register />}
+          />
 
           {/* AUTHENTICATED ROUTES */}
 
@@ -175,12 +218,18 @@ export default function App() {
             }
           />
 
-          {/* CURATOR / EXHIBITION MANAGEMENT ROUTES */}
+          {/* CURATOR ROUTES */}
 
           <Route
             path="/curator/studio"
             element={
-              <Guard roles={["artist", "curator", "admin"]}>
+              <Guard
+                roles={[
+                  "artist",
+                  "curator",
+                  "admin",
+                ]}
+              >
                 <CuratorStudio />
               </Guard>
             }
@@ -189,7 +238,13 @@ export default function App() {
           <Route
             path="/curator/exhibitions"
             element={
-              <Guard roles={["artist", "curator", "admin"]}>
+              <Guard
+                roles={[
+                  "artist",
+                  "curator",
+                  "admin",
+                ]}
+              >
                 <ManageExhibitions />
               </Guard>
             }
@@ -198,7 +253,13 @@ export default function App() {
           <Route
             path="/manage-exhibitions"
             element={
-              <Guard roles={["artist", "curator", "admin"]}>
+              <Guard
+                roles={[
+                  "artist",
+                  "curator",
+                  "admin",
+                ]}
+              >
                 <ManageExhibitions />
               </Guard>
             }
@@ -233,7 +294,10 @@ export default function App() {
             }
           />
 
-          <Route path="*" element={<NotFound />} />
+          <Route
+            path="*"
+            element={<NotFound />}
+          />
         </Routes>
       </main>
 

@@ -6,37 +6,68 @@ import {
 import {
   Link,
   useNavigate,
+  useParams,
 } from "react-router-dom";
 
 import api from "../services/api";
 
 
-const INITIAL_FORM = {
-  title: "",
-  description: "",
-  category: "",
-  medium: "",
-  year: String(
-    new Date().getFullYear()
-  ),
-  price: "",
-  status: "published",
-};
+const BACKEND_URL = (
+  import.meta.env.VITE_API_URL ||
+  "http://127.0.0.1:5000/api"
+).replace(/\/api\/?$/, "");
 
 
-export default function UploadArtwork() {
+function getImageUrl(imageUrl) {
+  if (!imageUrl) {
+    return "";
+  }
+
+  if (
+    imageUrl.startsWith("http://") ||
+    imageUrl.startsWith("https://") ||
+    imageUrl.startsWith("data:") ||
+    imageUrl.startsWith("blob:")
+  ) {
+    return imageUrl;
+  }
+
+  return `${BACKEND_URL}${
+    imageUrl.startsWith("/")
+      ? ""
+      : "/"
+  }${imageUrl}`;
+}
+
+
+export default function EditArtwork() {
+  const { id } = useParams();
   const navigate = useNavigate();
 
   const [form, setForm] =
-    useState(INITIAL_FORM);
+    useState({
+      title: "",
+      description: "",
+      category: "",
+      medium: "",
+      year: "",
+      price: "",
+      status: "draft",
+    });
 
   const [image, setImage] =
     useState(null);
 
+  const [currentImage, setCurrentImage] =
+    useState("");
+
   const [preview, setPreview] =
     useState("");
 
-  const [uploading, setUploading] =
+  const [pageLoading, setPageLoading] =
+    useState(true);
+
+  const [saving, setSaving] =
     useState(false);
 
   const [error, setError] =
@@ -44,6 +75,137 @@ export default function UploadArtwork() {
 
   const [message, setMessage] =
     useState("");
+
+
+  useEffect(() => {
+    const loadArtwork = async () => {
+      try {
+        setPageLoading(true);
+        setError("");
+
+        const response =
+          await api.get(
+            `/artworks/${id}`
+          );
+
+        const artwork =
+          response.data?.artwork ||
+          response.data;
+
+        if (!artwork) {
+          setError(
+            "Artwork information was not found."
+          );
+
+          return;
+        }
+
+        setForm({
+          title:
+            artwork.title || "",
+
+          description:
+            artwork.description || "",
+
+          category:
+            artwork.category || "",
+
+          medium:
+            artwork.medium || "",
+
+          year:
+            artwork.year
+              ? String(artwork.year)
+              : "",
+
+          price:
+            artwork.price !== null &&
+            artwork.price !== undefined
+              ? String(artwork.price)
+              : "",
+
+          status:
+            artwork.status ||
+            "draft",
+        });
+
+        setCurrentImage(
+          getImageUrl(
+            artwork.image_url ||
+              artwork.image
+          )
+        );
+      } catch (requestError) {
+        console.error(
+          "Failed to load artwork:",
+          requestError
+        );
+
+        const backendMessage =
+          requestError.response?.data
+            ?.error ||
+          requestError.response?.data
+            ?.message ||
+          requestError.response?.data
+            ?.msg ||
+          requestError.response?.data
+            ?.detail;
+
+        if (
+          requestError.response?.status ===
+          401
+        ) {
+          setError(
+            backendMessage ||
+              "Your session has expired. Please log in again."
+          );
+
+          return;
+        }
+
+        if (
+          requestError.response?.status ===
+          403
+        ) {
+          setError(
+            backendMessage ||
+              "You do not have permission to edit this artwork."
+          );
+
+          return;
+        }
+
+        if (
+          requestError.response?.status ===
+          404
+        ) {
+          setError(
+            backendMessage ||
+              "Artwork not found."
+          );
+
+          return;
+        }
+
+        setError(
+          backendMessage ||
+            "Failed to load artwork details."
+        );
+      } finally {
+        setPageLoading(false);
+      }
+    };
+
+    if (id) {
+      loadArtwork();
+    } else {
+      setError(
+        "Artwork ID is missing."
+      );
+
+      setPageLoading(false);
+    }
+  }, [id]);
 
 
   useEffect(() => {
@@ -163,16 +325,8 @@ export default function UploadArtwork() {
       return "Artwork title is required.";
     }
 
-    if (!form.description.trim()) {
-      return "Artwork description is required.";
-    }
-
     if (!form.category) {
       return "Please select an artwork category.";
-    }
-
-    if (!form.medium.trim()) {
-      return "Artwork medium is required.";
     }
 
     if (
@@ -197,13 +351,11 @@ export default function UploadArtwork() {
       ![
         "draft",
         "published",
+        "archived",
+        "sold",
       ].includes(form.status)
     ) {
       return "Please select a valid artwork status.";
-    }
-
-    if (!image) {
-      return "Please select an artwork image.";
     }
 
     return "";
@@ -264,55 +416,55 @@ export default function UploadArtwork() {
       form.status
     );
 
-    formData.append(
-      "image",
-      image
-    );
+    if (image) {
+      formData.append(
+        "image",
+        image
+      );
+    }
 
     try {
-      setUploading(true);
+      setSaving(true);
 
-      const response = await api.post(
-        "/artworks",
-        formData
-      );
-
-      console.log(
-        "Artwork upload response:",
-        response.data
-      );
+      const response =
+        await api.put(
+          `/artworks/${id}`,
+          formData
+        );
 
       setMessage(
-        "Artwork uploaded successfully."
+        "Artwork updated successfully."
       );
 
-      const createdArtwork =
+      const updatedArtwork =
         response.data?.artwork ||
         response.data;
 
-      const artworkId =
-        createdArtwork?.id;
+      if (
+        updatedArtwork?.image_url ||
+        updatedArtwork?.image
+      ) {
+        setCurrentImage(
+          getImageUrl(
+            updatedArtwork.image_url ||
+              updatedArtwork.image
+          )
+        );
+      } else if (preview) {
+        setCurrentImage(preview);
+      }
+
+      setImage(null);
 
       setTimeout(() => {
-        if (artworkId) {
-          navigate(
-            `/artworks/${artworkId}`
-          );
-        } else {
-          navigate(
-            "/artist/artworks"
-          );
-        }
+        navigate(
+          `/artworks/${id}`
+        );
       }, 700);
     } catch (requestError) {
       console.error(
-        "Artwork upload failed:",
+        "Artwork update failed:",
         requestError
-      );
-
-      console.error(
-        "Backend response:",
-        requestError.response?.data
       );
 
       const backendMessage =
@@ -344,7 +496,19 @@ export default function UploadArtwork() {
       ) {
         setError(
           backendMessage ||
-            "Only artist accounts can upload artwork."
+            "You can only edit artworks that belong to your account."
+        );
+
+        return;
+      }
+
+      if (
+        requestError.response?.status ===
+        404
+      ) {
+        setError(
+          backendMessage ||
+            "Artwork not found."
         );
 
         return;
@@ -375,12 +539,52 @@ export default function UploadArtwork() {
 
       setError(
         backendMessage ||
-          "Failed to upload artwork."
+          "Failed to update artwork."
       );
     } finally {
-      setUploading(false);
+      setSaving(false);
     }
   };
+
+
+  if (pageLoading) {
+    return (
+      <main className="page-container">
+        <section className="form-card">
+          <div className="loading-state">
+            <p>
+              Loading artwork details...
+            </p>
+          </div>
+        </section>
+      </main>
+    );
+  }
+
+
+  if (error && !form.title) {
+    return (
+      <main className="page-container">
+        <section className="form-card">
+          <div className="error-state">
+            <p
+              className="error"
+              role="alert"
+            >
+              {error}
+            </p>
+
+            <Link
+              className="btn"
+              to="/artist/artworks"
+            >
+              Back to My Artworks
+            </Link>
+          </div>
+        </section>
+      </main>
+    );
+  }
 
 
   return (
@@ -391,11 +595,12 @@ export default function UploadArtwork() {
             Artist Studio
           </p>
 
-          <h1>Upload Artwork</h1>
+          <h1>Edit Artwork</h1>
 
           <p>
-            Add a new artwork to your
-            ArtVault portfolio.
+            Update your artwork
+            information, price,
+            publication status or image.
           </p>
         </div>
 
@@ -435,7 +640,7 @@ export default function UploadArtwork() {
               onChange={handleChange}
               placeholder="Enter artwork title"
               maxLength="150"
-              disabled={uploading}
+              disabled={saving}
               required
             />
           </div>
@@ -450,11 +655,10 @@ export default function UploadArtwork() {
               name="description"
               value={form.description}
               onChange={handleChange}
-              placeholder="Describe the story, inspiration and details of your artwork"
+              placeholder="Describe your artwork"
               rows="6"
               maxLength="2000"
-              disabled={uploading}
-              required
+              disabled={saving}
             />
           </div>
 
@@ -469,7 +673,7 @@ export default function UploadArtwork() {
                 name="category"
                 value={form.category}
                 onChange={handleChange}
-                disabled={uploading}
+                disabled={saving}
                 required
               >
                 <option value="">
@@ -513,10 +717,9 @@ export default function UploadArtwork() {
                 name="medium"
                 value={form.medium}
                 onChange={handleChange}
-                placeholder="For example: Graphite and ink"
+                placeholder="For example: Oil on canvas"
                 maxLength="120"
-                disabled={uploading}
-                required
+                disabled={saving}
               />
             </div>
 
@@ -535,7 +738,7 @@ export default function UploadArtwork() {
                 max={
                   new Date().getFullYear()
                 }
-                disabled={uploading}
+                disabled={saving}
               />
             </div>
 
@@ -553,7 +756,7 @@ export default function UploadArtwork() {
                 min="1"
                 step="0.01"
                 placeholder="2500"
-                disabled={uploading}
+                disabled={saving}
                 required
               />
             </div>
@@ -568,28 +771,30 @@ export default function UploadArtwork() {
                 name="status"
                 value={form.status}
                 onChange={handleChange}
-                disabled={uploading}
+                disabled={saving}
               >
+                <option value="draft">
+                  Draft
+                </option>
+
                 <option value="published">
                   Published
                 </option>
 
-                <option value="draft">
-                  Draft
+                <option value="archived">
+                  Archived
+                </option>
+
+                <option value="sold">
+                  Sold
                 </option>
               </select>
-
-              <small className="field-help">
-                Published artworks are
-                visible to visitors and
-                collectors.
-              </small>
             </div>
           </div>
 
           <div className="form-group">
             <label htmlFor="image">
-              Artwork image
+              Replace artwork image
             </label>
 
             <div className="upload-box">
@@ -601,40 +806,53 @@ export default function UploadArtwork() {
                 onChange={
                   handleImageChange
                 }
-                disabled={uploading}
-                required
+                disabled={saving}
               />
 
               <p>
-                Choose JPG, PNG, WEBP or
-                GIF. Maximum size: 5 MB.
+                Leave this empty to keep
+                the current image. Maximum
+                size: 5 MB.
               </p>
             </div>
           </div>
 
-          {preview && (
-            <div className="image-preview">
-              <div className="preview-heading">
-                <p>Artwork preview</p>
+          <div className="edit-image-grid">
+            {currentImage && (
+              <div className="image-preview">
+                <p>Current image</p>
 
-                <button
-                  className="text-btn danger"
-                  type="button"
-                  onClick={
-                    clearSelectedImage
-                  }
-                  disabled={uploading}
-                >
-                  Remove
-                </button>
+                <img
+                  src={currentImage}
+                  alt="Current artwork"
+                />
               </div>
+            )}
 
-              <img
-                src={preview}
-                alt="Artwork preview"
-              />
-            </div>
-          )}
+            {preview && (
+              <div className="image-preview">
+                <div className="preview-heading">
+                  <p>New image</p>
+
+                  <button
+                    className="text-btn danger"
+                    type="button"
+                    onClick={
+                      clearSelectedImage
+                    }
+                    disabled={saving}
+                  >
+                    Remove
+                  </button>
+                </div>
+
+                <img
+                  src={preview}
+                  alt="New artwork preview"
+                />
+              </div>
+            )}
+          </div>
 
           <div className="form-actions">
             <Link
@@ -647,11 +865,11 @@ export default function UploadArtwork() {
             <button
               className="btn"
               type="submit"
-              disabled={uploading}
+              disabled={saving}
             >
-              {uploading
-                ? "Uploading artwork..."
-                : "Upload Artwork"}
+              {saving
+                ? "Saving changes..."
+                : "Save Changes"}
             </button>
           </div>
         </form>

@@ -4,7 +4,6 @@ import AdminDashboard from "./AdminDashboard";
 import ArtistDashboard from "./ArtistDashboard";
 import VisitorDashboard from "./VisitorDashboard";
 
-
 export default function Dashboard() {
   const {
     user,
@@ -18,16 +17,33 @@ export default function Dashboard() {
     .trim()
     .toLowerCase();
 
-  if (isAdmin) {
-    return <AdminDashboard />;
-  }
+  return (
+    <div>
+      <div
+        style={{
+          position: "fixed",
+          top: "10px",
+          left: "50%",
+          zIndex: 99999,
+          padding: "10px 18px",
+          color: "black",
+          background: "gold",
+          borderRadius: "8px",
+          transform: "translateX(-50%)",
+          fontWeight: "700",
+        }}
+      >
+        ACTIVE BUILD — role: {role} —
+        isArtist: {String(isArtist)}
+      </div>
 
-  if (
-    isArtist ||
-    role === "artist"
-  ) {
-    return <ArtistDashboard />;
-  }
-
-  return <VisitorDashboard />;
+      {isAdmin ? (
+        <AdminDashboard />
+      ) : isArtist || role === "artist" ? (
+        <ArtistDashboard />
+      ) : (
+        <VisitorDashboard />
+      )}
+    </div>
+  );
 }
