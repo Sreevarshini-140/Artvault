@@ -89,9 +89,8 @@ export default function Shop() {
         setLoading(true);
         setError("");
 
-        const response = await api.get(
-          "/artworks"
-        );
+        const response =
+          await api.get("/artworks");
 
         const responseData =
           response.data;
@@ -343,10 +342,12 @@ export default function Shop() {
   function resetFilters() {
     setFormat("All formats");
     setPrice("Any price");
+
     setApplied({
       format: "All formats",
       price: "Any price",
     });
+
     setSearchTerm("");
   }
 
@@ -727,6 +728,7 @@ export default function Shop() {
                     }
                   >
                     View cart
+
                     <ArrowRight
                       size={16}
                     />
@@ -745,8 +747,6 @@ export default function Shop() {
                         key={index}
                       >
                         <div className="shop-skeleton shop-skeleton-image" />
-
-                        <div className="shop-skeleton shop-skeleton-label" />
 
                         <div className="shop-skeleton shop-skeleton-title" />
 
@@ -951,104 +951,67 @@ export default function Shop() {
                                   unavailable
                                 </span>
                               </div>
-
-                              <div className="shop-product-image-overlay">
-                                <span>
-                                  View artwork
-                                </span>
-
-                                <ArrowRight
-                                  size={18}
-                                />
-                              </div>
-
-                              <span className="shop-product-number">
-                                {String(
-                                  index + 1
-                                ).padStart(
-                                  2,
-                                  "0"
-                                )}
-                              </span>
                             </button>
 
                             <div className="shop-product-info">
-                              <div className="shop-product-meta">
-                                <span>
-                                  Original
-                                  artwork
+                              <div className="shop-product-heading">
+                                <button
+                                  type="button"
+                                  className="shop-product-title-button"
+                                  onClick={() =>
+                                    navigate(
+                                      `/artworks/${artworkId}`
+                                    )
+                                  }
+                                >
+                                  <h3>
+                                    {artwork?.title ||
+                                      "Untitled Artwork"}
+                                  </h3>
+                                </button>
+
+                                <p className="shop-product-artist">
+                                  {artistName}
+                                </p>
+                              </div>
+
+                              <div className="shop-product-details">
+                                <span className="shop-product-medium">
+                                  {artworkMedium}
                                 </span>
 
-                                <span>
-                                  {
-                                    artworkMedium
-                                  }
-                                </span>
+                                <strong className="shop-product-price">
+                                  ₹
+                                  {artworkPrice.toLocaleString(
+                                    "en-IN"
+                                  )}
+                                </strong>
                               </div>
 
                               <button
+                                className="shop-cart-button"
                                 type="button"
-                                className="shop-product-title-button"
                                 onClick={() =>
-                                  navigate(
-                                    `/artworks/${artworkId}`
+                                  handleAddToCart(
+                                    artwork
                                   )
                                 }
+                                aria-label={`Add ${
+                                  artwork?.title ||
+                                  "artwork"
+                                } to cart`}
                               >
-                                <h3>
-                                  {artwork?.title ||
-                                    "Untitled Artwork"}
-                                </h3>
+                                <span>
+                                  Add to cart
+                                </span>
+
+                                <ArrowRight
+                                  size={16}
+                                  strokeWidth={
+                                    1.8
+                                  }
+                                />
                               </button>
-
-                              <p className="shop-product-artist">
-                                By{" "}
-                                <strong>
-                                  {
-                                    artistName
-                                  }
-                                </strong>
-                              </p>
-
-                              <div className="shop-product-bottom">
-                                <div className="shop-product-price">
-                                  <span>
-                                    Price
-                                  </span>
-
-                                  <strong>
-                                    ₹
-                                    {artworkPrice.toLocaleString(
-                                      "en-IN"
-                                    )}
-                                  </strong>
-                                </div>
-
-                                <button
-                                  className="shop-cart-button"
-                                  type="button"
-                                  onClick={() =>
-                                    handleAddToCart(
-                                      artwork
-                                    )
-                                  }
-                                  aria-label={`Add ${
-                                    artwork?.title ||
-                                    "artwork"
-                                  } to cart`}
-                                >
-                                  <ShoppingBag
-                                    size={18}
-                                    strokeWidth={
-                                      1.8
-                                    }
-                                  />
-
-                                  <span>
-                                    Add to cart
-                                  </span>
-                                </button>
-                              </div>
                             </div>
                           </article>
                         );
