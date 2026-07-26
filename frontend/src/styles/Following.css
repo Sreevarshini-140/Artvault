@@ -1,0 +1,254 @@
+.av-following-page {
+  min-height: 100vh;
+  padding: 60px 24px;
+  background: #090909;
+  color: #f5f1e8;
+  position: relative;
+  overflow: hidden;
+}
+
+.av-following-glow {
+  position: absolute;
+  width: 420px;
+  height: 420px;
+  border-radius: 50%;
+  filter: blur(120px);
+  pointer-events: none;
+}
+
+.av-following-glow-left {
+  top: -120px;
+  left: -140px;
+  background: rgba(201, 160, 84, 0.12);
+}
+
+.av-following-glow-right {
+  bottom: -120px;
+  right: -140px;
+  background: rgba(160, 110, 45, 0.10);
+}
+
+.av-following-container {
+  position: relative;
+  z-index: 2;
+  max-width: 1200px;
+  margin: auto;
+}
+
+.av-following-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 45px;
+  gap: 24px;
+}
+
+.av-following-eyebrow {
+  color: #caa054;
+  letter-spacing: .25em;
+  font-size: .72rem;
+  font-weight: 700;
+}
+
+.av-following-header h1 {
+  margin: 8px 0;
+  font-family: Georgia, serif;
+  font-size: 3rem;
+  color: #fff9ee;
+}
+
+.av-following-description {
+  max-width: 620px;
+  color: #9b968d;
+  line-height: 1.7;
+}
+
+.av-following-count {
+  padding: 12px 18px;
+  border-radius: 999px;
+  border: 1px solid rgba(202,160,84,.25);
+  background: rgba(202,160,84,.08);
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.av-following-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill,minmax(330px,1fr));
+  gap: 26px;
+}
+
+.av-following-card {
+  border-radius: 22px;
+  border: 1px solid rgba(255,255,255,.08);
+  background: rgba(255,255,255,.03);
+  backdrop-filter: blur(18px);
+  padding: 28px;
+  transition: .35s ease;
+}
+
+.av-following-card:hover {
+  transform: translateY(-8px);
+  border-color: rgba(202,160,84,.35);
+  box-shadow: 0 25px 60px rgba(0,0,0,.35);
+}
+
+.av-following-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  overflow: hidden;
+  margin-bottom: 18px;
+  background: linear-gradient(135deg,#e0c27d,#8d6324);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  color:#111;
+  font-size:1.4rem;
+  font-weight:bold;
+}
+
+.av-following-avatar img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+.av-following-card-label{
+  color:#caa054;
+  font-size:.72rem;
+  letter-spacing:.18em;
+}
+
+.av-following-card h2{
+  margin:8px 0;
+  font-family:Georgia,serif;
+  color:#fff8eb;
+}
+
+.av-following-bio{
+  color:#9f988d;
+  line-height:1.7;
+  min-height:70px;
+}
+
+.av-following-stats{
+  display:flex;
+  gap:18px;
+  flex-wrap:wrap;
+  margin-top:18px;
+  color:#d7cfbf;
+  font-size:.88rem;
+}
+
+.av-following-stats span{
+  display:flex;
+  gap:6px;
+  align-items:center;
+}
+
+.av-following-actions{
+  margin-top:26px;
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+}
+
+.av-following-view{
+  color:#dcb86d;
+  text-decoration:none;
+  display:flex;
+  align-items:center;
+  gap:6px;
+}
+
+.av-following-view:hover{
+  color:#ffe3a3;
+}
+
+.av-following-unfollow{
+  border:none;
+  padding:10px 18px;
+  border-radius:999px;
+  cursor:pointer;
+  background:#b83b3b;
+  color:white;
+  transition:.25s;
+}
+
+.av-following-unfollow:hover{
+  background:#cf4d4d;
+}
+
+.av-following-empty{
+  text-align:center;
+  padding:80px 20px;
+}
+
+.av-following-empty-icon{
+  width:90px;
+  height:90px;
+  margin:auto;
+  border-radius:50%;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  background:rgba(202,160,84,.08);
+  color:#d5ad61;
+  margin-bottom:25px;
+}
+
+.av-following-explore{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  margin-top:30px;
+  padding:14px 24px;
+  border-radius:999px;
+  background:#d2ad65;
+  color:#111;
+  text-decoration:none;
+  font-weight:600;
+}
+
+.av-following-loading{
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  min-height:70vh;
+  gap:16px;
+}
+
+.av-following-spinner{
+  animation:spin .8s linear infinite;
+}
+
+.av-following-message{
+  margin-bottom:22px;
+  color:#d7c08c;
+}
+
+@keyframes spin{
+  to{
+    transform:rotate(360deg);
+  }
+}
+
+@media(max-width:768px){
+
+.av-following-header{
+    flex-direction:column;
+    align-items:flex-start;
+}
+
+.av-following-header h1{
+    font-size:2.3rem;
+}
+
+.av-following-actions{
+    flex-direction:column;
+}
+
+}

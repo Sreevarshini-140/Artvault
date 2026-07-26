@@ -1,0 +1,1740 @@
+/* =========================================================
+   ARTVAULT ARTWORK DETAIL
+   Uses the existing global ArtVault theme variables:
+   --bg
+   --surface
+   --surface-soft
+   --text
+   --muted
+   --gold
+   --line
+========================================================= */
+
+
+/* =========================================================
+   PAGE
+========================================================= */
+
+.detail-page {
+  width: 100%;
+  min-height: 100vh;
+
+  padding:
+    130px 7vw
+    100px;
+
+  background: var(--bg);
+  color: var(--text);
+}
+
+
+.detail-container,
+.reviews-section,
+.similar-section {
+  width: min(1200px, 100%);
+  margin-inline: auto;
+}
+
+
+/* =========================================================
+   MAIN ARTWORK LAYOUT
+========================================================= */
+
+.detail-container {
+  display: grid;
+
+  grid-template-columns:
+    minmax(0, 1.03fr)
+    minmax(360px, 0.97fr);
+
+  gap: 70px;
+  align-items: center;
+}
+
+
+.detail-gallery {
+  min-width: 0;
+}
+
+
+.detail-info {
+  min-width: 0;
+  padding: 20px 0;
+}
+
+
+/* =========================================================
+   ARTWORK IMAGE
+========================================================= */
+
+.detail-image-box {
+  position: relative;
+
+  overflow: hidden;
+
+  width: 100%;
+  aspect-ratio: 4 / 5;
+
+  border:
+    1px solid
+    color-mix(
+      in srgb,
+      var(--gold) 34%,
+      var(--line)
+    );
+
+  border-radius: 18px;
+
+  background: #090807;
+
+  box-shadow:
+    0 28px 65px
+    rgba(0, 0, 0, 0.3);
+
+  isolation: isolate;
+}
+
+
+.detail-image-box::before {
+  position: absolute;
+  z-index: 2;
+
+  inset: 14px;
+
+  border:
+    1px solid
+    color-mix(
+      in srgb,
+      var(--gold) 38%,
+      transparent
+    );
+
+  border-radius: 11px;
+
+  content: "";
+
+  pointer-events: none;
+}
+
+
+.detail-image-box::after {
+  position: absolute;
+  z-index: 1;
+
+  inset: 0;
+
+  background:
+    linear-gradient(
+      180deg,
+      transparent 60%,
+      rgba(0, 0, 0, 0.18)
+    );
+
+  content: "";
+
+  pointer-events: none;
+}
+
+
+.detail-art-image {
+  display: block;
+
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+
+  transform: scale(1);
+
+  filter:
+    brightness(0.94)
+    contrast(1.02);
+
+  transition:
+    transform
+    1.4s
+    cubic-bezier(
+      0.19,
+      1,
+      0.22,
+      1
+    ),
+    filter 0.8s ease;
+}
+
+
+.detail-image-box:hover
+.detail-art-image {
+  transform: scale(1.05);
+
+  filter:
+    brightness(1.05)
+    contrast(1.04);
+}
+
+
+/* =========================================================
+   ARTWORK INFORMATION
+========================================================= */
+
+.detail-eyebrow {
+  margin: 0 0 13px;
+
+  color: var(--gold);
+
+  font-size: 12px;
+  font-weight: 600;
+
+  letter-spacing: 3px;
+
+  text-transform: uppercase;
+}
+
+
+.detail-title {
+  max-width: 680px;
+
+  margin:
+    14px 0
+    18px;
+
+  color: var(--text);
+
+  font-family:
+    "Cormorant Garamond",
+    serif;
+
+  font-size: clamp(
+    48px,
+    6vw,
+    72px
+  );
+
+  font-weight: 600;
+  line-height: 0.96;
+
+  letter-spacing: -0.025em;
+}
+
+
+.detail-artist-link {
+  display: inline-flex;
+
+  margin: 0;
+  padding: 0;
+
+  border: 0;
+
+  background: transparent;
+
+  color: var(--gold);
+
+  font: inherit;
+  font-size: 16px;
+  font-weight: 500;
+
+  letter-spacing: 0.3px;
+
+  cursor: pointer;
+
+  transition:
+    color 0.25s ease,
+    transform 0.25s ease;
+}
+
+
+.detail-artist-link:hover {
+  color: var(--text);
+
+  transform:
+    translateX(4px);
+}
+
+
+.detail-rating-line {
+  display: flex;
+  flex-wrap: wrap;
+
+  align-items: center;
+
+  gap: 9px;
+
+  margin-top: 23px;
+}
+
+
+.detail-rating-line strong {
+  color: var(--text);
+
+  font-size: 14px;
+  font-weight: 600;
+}
+
+
+.detail-rating-line span {
+  color: var(--muted);
+
+  font-size: 13px;
+}
+
+
+.detail-description {
+  max-width: 580px;
+
+  margin:
+    30px 0 0;
+
+  color: var(--muted);
+
+  font-size: 16px;
+  line-height: 1.9;
+}
+
+
+/* =========================================================
+   ARTWORK METADATA
+========================================================= */
+
+.detail-meta {
+  display: grid;
+
+  grid-template-columns:
+    repeat(
+      3,
+      minmax(0, 1fr)
+    );
+
+  gap: 16px;
+
+  margin:
+    38px 0
+    0;
+}
+
+
+.detail-meta > div {
+  min-width: 0;
+
+  padding: 19px;
+
+  border:
+    1px solid
+    var(--line);
+
+  border-radius: 14px;
+
+  background:
+    var(--surface);
+
+  transition:
+    transform 0.4s ease,
+    border-color 0.4s ease,
+    box-shadow 0.4s ease;
+}
+
+
+.detail-meta > div:hover {
+  transform:
+    translateY(-4px);
+
+  border-color:
+    var(--gold);
+
+  box-shadow:
+    0 15px 35px
+    rgba(0, 0, 0, 0.14);
+}
+
+
+.detail-meta span {
+  display: block;
+
+  margin-bottom: 8px;
+
+  color: var(--muted);
+
+  font-size: 11px;
+  font-weight: 500;
+
+  letter-spacing: 1px;
+
+  text-transform: uppercase;
+}
+
+
+.detail-meta strong {
+  display: block;
+
+  overflow: hidden;
+
+  color: var(--text);
+
+  font-size: 15px;
+  font-weight: 600;
+
+  line-height: 1.35;
+
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+
+/* =========================================================
+   PRICE
+========================================================= */
+
+.detail-price {
+  margin:
+    35px 0
+    0;
+
+  color: var(--gold);
+
+  font-family:
+    "Cormorant Garamond",
+    serif;
+
+  font-size: clamp(
+    40px,
+    5vw,
+    52px
+  );
+
+  font-weight: 700;
+  line-height: 1;
+}
+
+
+/* =========================================================
+   ARTWORK ACTIONS
+========================================================= */
+
+.detail-actions {
+  display: flex;
+  flex-wrap: wrap;
+
+  gap: 14px;
+
+  margin-top: 30px;
+}
+
+
+.detail-primary-button,
+.detail-secondary-button {
+  display: inline-flex;
+
+  min-height: 48px;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 8px;
+
+  padding:
+    13px 21px;
+
+  border-radius: 4px;
+
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.25s ease,
+    background 0.25s ease,
+    color 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+
+.detail-primary-button {
+  border:
+    1px solid
+    var(--gold);
+
+  background:
+    var(--gold);
+
+  color: #111111;
+}
+
+
+.detail-primary-button:hover:not(
+  :disabled
+) {
+  transform:
+    translateY(-2px);
+
+  background:
+    color-mix(
+      in srgb,
+      var(--gold) 88%,
+      white
+    );
+
+  border-color:
+    color-mix(
+      in srgb,
+      var(--gold) 88%,
+      white
+    );
+
+  box-shadow:
+    0 12px 28px
+    color-mix(
+      in srgb,
+      var(--gold) 20%,
+      transparent
+    );
+}
+
+
+.detail-secondary-button {
+  border:
+    1px solid
+    var(--line);
+
+  background:
+    transparent;
+
+  color: var(--text);
+}
+
+
+.detail-secondary-button:hover:not(
+  :disabled
+) {
+  transform:
+    translateY(-2px);
+
+  border-color:
+    var(--gold);
+
+  color:
+    var(--gold);
+}
+
+
+.detail-primary-button:disabled,
+.detail-secondary-button:disabled {
+  cursor: not-allowed;
+
+  opacity: 0.58;
+
+  transform: none;
+}
+
+
+.detail-message {
+  margin:
+    21px 0 0;
+
+  color: var(--gold);
+
+  font-size: 14px;
+  font-weight: 500;
+
+  line-height: 1.6;
+}
+
+
+/* =========================================================
+   RATING STARS
+========================================================= */
+
+.rating-stars {
+  display: inline-flex;
+
+  align-items: center;
+
+  gap: 3px;
+}
+
+
+.rating-star {
+  color:
+    color-mix(
+      in srgb,
+      var(--muted) 45%,
+      transparent
+    );
+}
+
+
+.rating-star.is-active {
+  color: var(--gold);
+}
+
+
+.rating-star-button {
+  display: inline-grid;
+
+  width: 35px;
+  height: 35px;
+
+  padding: 0;
+
+  border: 0;
+
+  background:
+    transparent;
+
+  color:
+    color-mix(
+      in srgb,
+      var(--muted) 52%,
+      transparent
+    );
+
+  cursor: pointer;
+
+  place-items: center;
+
+  transition:
+    color 0.2s ease,
+    transform 0.2s ease;
+}
+
+
+.rating-star-button:hover,
+.rating-star-button.is-active {
+  color: var(--gold);
+}
+
+
+.rating-star-button:hover {
+  transform:
+    translateY(-2px)
+    scale(1.08);
+}
+
+
+/* =========================================================
+   REVIEWS SECTION
+========================================================= */
+
+.reviews-section {
+  margin-top: 105px;
+
+  padding: 42px;
+
+  border:
+    1px solid
+    var(--line);
+
+  border-radius: 18px;
+
+  background:
+    var(--surface);
+}
+
+
+.reviews-heading {
+  display: flex;
+
+  align-items: flex-end;
+  justify-content: space-between;
+
+  gap: 30px;
+
+  padding-bottom: 30px;
+
+  border-bottom:
+    1px solid
+    var(--line);
+}
+
+
+.reviews-heading h2,
+.review-form-panel h2,
+.similar-section h2 {
+  margin: 0;
+
+  color: var(--text);
+
+  font-family:
+    "Cormorant Garamond",
+    serif;
+
+  font-weight: 600;
+  line-height: 1;
+}
+
+
+.reviews-heading h2 {
+  font-size: clamp(
+    38px,
+    5vw,
+    54px
+  );
+}
+
+
+.reviews-heading
+> div:first-child
+> p:last-child {
+  max-width: 600px;
+
+  margin:
+    13px 0 0;
+
+  color: var(--muted);
+
+  font-size: 14px;
+  line-height: 1.75;
+}
+
+
+.reviews-summary {
+  display: grid;
+
+  flex: 0 0 auto;
+
+  justify-items: end;
+}
+
+
+.reviews-summary > strong {
+  color: var(--gold);
+
+  font-family:
+    "Cormorant Garamond",
+    serif;
+
+  font-size: 50px;
+  font-weight: 700;
+  line-height: 0.9;
+}
+
+
+.reviews-summary > span {
+  margin-top: 8px;
+
+  color: var(--muted);
+
+  font-size: 12px;
+}
+
+
+/* =========================================================
+   REVIEWS LAYOUT
+========================================================= */
+
+.reviews-layout {
+  display: grid;
+
+  grid-template-columns:
+    minmax(0, 1.18fr)
+    minmax(330px, 0.82fr);
+
+  gap: 25px;
+
+  align-items: start;
+
+  margin-top: 30px;
+}
+
+
+.reviews-list-panel {
+  display: grid;
+
+  gap: 15px;
+}
+
+
+/* =========================================================
+   REVIEW CARD
+========================================================= */
+
+.review-card {
+  padding: 23px;
+
+  border:
+    1px solid
+    var(--line);
+
+  border-radius: 14px;
+
+  background:
+    var(--surface-soft);
+
+  transition:
+    transform 0.35s ease,
+    border-color 0.35s ease,
+    box-shadow 0.35s ease;
+}
+
+
+.review-card:hover {
+  transform:
+    translateY(-3px);
+
+  border-color:
+    color-mix(
+      in srgb,
+      var(--gold) 65%,
+      var(--line)
+    );
+
+  box-shadow:
+    0 18px 38px
+    rgba(0, 0, 0, 0.16);
+}
+
+
+.review-card-top {
+  display: flex;
+
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 18px;
+}
+
+
+.review-author {
+  display: flex;
+
+  min-width: 0;
+
+  align-items: center;
+
+  gap: 13px;
+}
+
+
+.review-avatar {
+  display: inline-grid;
+
+  width: 43px;
+  height: 43px;
+
+  flex: 0 0 43px;
+
+  border:
+    1px solid
+    color-mix(
+      in srgb,
+      var(--gold) 48%,
+      var(--line)
+    );
+
+  border-radius: 50%;
+
+  background:
+    var(--surface);
+
+  color:
+    var(--gold);
+
+  place-items: center;
+}
+
+
+.review-author h3 {
+  margin: 0;
+
+  color: var(--text);
+
+  font-size: 15px;
+  font-weight: 600;
+}
+
+
+.review-author time {
+  display: block;
+
+  margin-top: 5px;
+
+  color: var(--muted);
+
+  font-size: 12px;
+}
+
+
+.review-comment {
+  margin:
+    20px 0 0;
+
+  color: var(--muted);
+
+  font-size: 14px;
+  line-height: 1.8;
+
+  white-space: pre-wrap;
+}
+
+
+/* =========================================================
+   REVIEW ACTION BUTTONS
+========================================================= */
+
+.review-actions {
+  display: flex;
+  flex-wrap: wrap;
+
+  gap: 9px;
+
+  margin-top: 20px;
+}
+
+
+.review-actions button {
+  display: inline-flex;
+
+  min-height: 36px;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 7px;
+
+  padding:
+    8px 12px;
+
+  border:
+    1px solid
+    var(--line);
+
+  border-radius: 5px;
+
+  background:
+    transparent;
+
+  color:
+    var(--text);
+
+  font: inherit;
+  font-size: 12px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    border-color 0.2s ease,
+    color 0.2s ease,
+    background 0.2s ease;
+}
+
+
+.review-actions button:hover:not(
+  :disabled
+) {
+  border-color:
+    var(--gold);
+
+  color:
+    var(--gold);
+}
+
+
+.review-actions
+.review-delete-button {
+  border-color:
+    color-mix(
+      in srgb,
+      var(--danger) 55%,
+      var(--line)
+    );
+
+  color:
+    #ff8f8f;
+}
+
+
+.review-actions
+.review-delete-button:hover:not(
+  :disabled
+) {
+  border-color:
+    var(--danger);
+
+  background:
+    color-mix(
+      in srgb,
+      var(--danger) 14%,
+      transparent
+    );
+
+  color:
+    #ff9b9b;
+}
+
+
+.review-actions button:disabled {
+  cursor: not-allowed;
+
+  opacity: 0.58;
+}
+
+
+/* =========================================================
+   REVIEW FORM PANEL
+========================================================= */
+
+.review-form-panel {
+  position: sticky;
+
+  top: 100px;
+
+  padding: 26px;
+
+  border:
+    1px solid
+    color-mix(
+      in srgb,
+      var(--gold) 35%,
+      var(--line)
+    );
+
+  border-radius: 14px;
+
+  background:
+    var(--bg);
+}
+
+
+.review-form-panel h2 {
+  font-size: 34px;
+}
+
+
+.review-form {
+  display: grid;
+
+  gap: 22px;
+
+  margin-top: 25px;
+}
+
+
+.review-field {
+  display: grid;
+
+  gap: 10px;
+}
+
+
+.review-field label {
+  color: var(--text);
+
+  font-size: 13px;
+  font-weight: 600;
+}
+
+
+.review-field small {
+  color: var(--muted);
+
+  font-size: 11px;
+}
+
+
+/* =========================================================
+   REVIEW TEXTAREA
+========================================================= */
+
+.review-field textarea {
+  width: 100%;
+  min-height: 145px;
+
+  resize: vertical;
+
+  padding: 14px;
+
+  border:
+    1px solid
+    var(--line);
+
+  border-radius: 4px;
+
+  outline: none;
+
+  background:
+    var(--surface);
+
+  color:
+    var(--text);
+
+  font: inherit;
+  font-size: 14px;
+
+  line-height: 1.65;
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+
+.review-field textarea::placeholder {
+  color:
+    var(--muted);
+}
+
+
+.review-field textarea:focus {
+  border-color:
+    var(--gold);
+
+  box-shadow:
+    0 0 0 3px
+    color-mix(
+      in srgb,
+      var(--gold) 14%,
+      transparent
+    );
+}
+
+
+.review-character-count {
+  text-align: right;
+}
+
+
+/* =========================================================
+   REVIEW FORM ACTIONS
+========================================================= */
+
+.review-form-actions {
+  display: flex;
+  flex-wrap: wrap;
+
+  gap: 10px;
+}
+
+
+.review-login-state,
+.review-existing-state {
+  display: grid;
+
+  gap: 18px;
+
+  margin-top: 22px;
+}
+
+
+.review-login-state p,
+.review-existing-state p {
+  margin: 0;
+
+  color: var(--muted);
+
+  font-size: 14px;
+  line-height: 1.75;
+}
+
+
+.review-existing-state > div {
+  display: grid;
+
+  gap: 12px;
+}
+
+
+/* =========================================================
+   REVIEW FEEDBACK
+========================================================= */
+
+.review-feedback {
+  margin:
+    18px 0 0;
+
+  padding: 12px 13px;
+
+  border-radius: 4px;
+
+  font-size: 13px;
+  font-weight: 500;
+
+  line-height: 1.55;
+}
+
+
+.review-feedback-success {
+  border:
+    1px solid
+    color-mix(
+      in srgb,
+      var(--success) 38%,
+      transparent
+    );
+
+  background:
+    color-mix(
+      in srgb,
+      var(--success) 10%,
+      transparent
+    );
+
+  color:
+    var(--success);
+}
+
+
+.review-feedback-error {
+  border:
+    1px solid
+    color-mix(
+      in srgb,
+      #ff8f8f 38%,
+      transparent
+    );
+
+  background:
+    color-mix(
+      in srgb,
+      #ff8f8f 10%,
+      transparent
+    );
+
+  color:
+    #ff9d9d;
+}
+
+
+/* =========================================================
+   EMPTY REVIEWS STATE
+========================================================= */
+
+.reviews-empty-state {
+  display: grid;
+
+  min-height: 275px;
+
+  align-content: center;
+  justify-items: center;
+
+  padding: 40px;
+
+  border:
+    1px dashed
+    color-mix(
+      in srgb,
+      var(--gold) 48%,
+      var(--line)
+    );
+
+  border-radius: 14px;
+
+  background:
+    var(--surface-soft);
+
+  color:
+    var(--gold);
+
+  text-align: center;
+}
+
+
+.reviews-empty-state h3 {
+  margin:
+    15px 0 0;
+
+  color:
+    var(--text);
+
+  font-family:
+    "Cormorant Garamond",
+    serif;
+
+  font-size: 27px;
+}
+
+
+.reviews-empty-state p {
+  max-width: 420px;
+
+  margin:
+    9px 0 0;
+
+  color:
+    var(--muted);
+
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+
+/* =========================================================
+   SIMILAR ARTWORKS
+========================================================= */
+
+.similar-section {
+  margin-top: 105px;
+}
+
+
+.similar-section h2 {
+  margin:
+    12px 0
+    38px;
+
+  font-size: clamp(
+    40px,
+    5vw,
+    54px
+  );
+}
+
+
+.similar-section .art-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(
+      3,
+      minmax(0, 1fr)
+    );
+
+  gap: 28px;
+}
+
+
+/* =========================================================
+   LOADING AND ERROR STATES
+========================================================= */
+
+.detail-state {
+  display: grid;
+
+  width: min(760px, 100%);
+  min-height: 65vh;
+
+  margin-inline: auto;
+
+  align-content: center;
+  justify-items: center;
+
+  padding:
+    130px 20px
+    80px;
+
+  color: var(--muted);
+
+  text-align: center;
+}
+
+
+.detail-state h1 {
+  margin: 0;
+
+  color: var(--text);
+
+  font-family:
+    "Cormorant Garamond",
+    serif;
+
+  font-size: clamp(
+    42px,
+    6vw,
+    64px
+  );
+}
+
+
+.detail-state p {
+  max-width: 520px;
+
+  margin:
+    14px 0
+    24px;
+
+  line-height: 1.7;
+}
+
+
+.detail-spinner {
+  animation:
+    detail-spin
+    0.8s
+    linear
+    infinite;
+}
+
+
+@keyframes detail-spin {
+  to {
+    transform:
+      rotate(360deg);
+  }
+}
+
+
+/* =========================================================
+   DARK THEME DETAILS
+========================================================= */
+
+html:not(
+  [data-theme="light"]
+)
+.detail-image-box {
+  box-shadow:
+    0 30px 75px
+    rgba(0, 0, 0, 0.48);
+}
+
+
+html:not(
+  [data-theme="light"]
+)
+.review-card:hover {
+  box-shadow:
+    0 22px 48px
+    rgba(0, 0, 0, 0.35);
+}
+
+
+/* =========================================================
+   LIGHT THEME DETAILS
+========================================================= */
+
+html[data-theme="light"]
+.detail-image-box {
+  background:
+    #e9e1d5;
+
+  box-shadow:
+    0 22px 55px
+    rgba(64, 45, 18, 0.16);
+}
+
+
+html[data-theme="light"]
+.detail-art-image {
+  filter:
+    brightness(0.98)
+    contrast(1.01);
+}
+
+
+html[data-theme="light"]
+.detail-image-box:hover
+.detail-art-image {
+  filter:
+    brightness(1.03)
+    contrast(1.03);
+}
+
+
+html[data-theme="light"]
+.detail-primary-button {
+  color: #111111;
+}
+
+
+html[data-theme="light"]
+.review-form-panel {
+  background:
+    var(--surface-soft);
+}
+
+
+html[data-theme="light"]
+.review-field textarea {
+  background:
+    var(--surface);
+}
+
+
+html[data-theme="light"]
+.review-feedback-error {
+  color: #a43b33;
+}
+
+
+html[data-theme="light"]
+.review-actions
+.review-delete-button {
+  color: #b42318;
+}
+
+
+/* =========================================================
+   RESPONSIVE - LAPTOP AND TABLET
+========================================================= */
+
+@media (
+  max-width: 1020px
+) {
+  .detail-page {
+    padding:
+      120px 5vw
+      85px;
+  }
+
+
+  .detail-container {
+    grid-template-columns:
+      1fr;
+
+    gap: 45px;
+  }
+
+
+  .detail-gallery {
+    width: min(
+      680px,
+      100%
+    );
+
+    margin-inline: auto;
+  }
+
+
+  .detail-info {
+    width: min(
+      680px,
+      100%
+    );
+
+    margin-inline: auto;
+
+    padding: 0;
+  }
+
+
+  .reviews-layout {
+    grid-template-columns:
+      1fr;
+  }
+
+
+  .review-form-panel {
+    position: static;
+  }
+
+
+  .similar-section
+  .art-grid {
+    grid-template-columns:
+      repeat(
+        2,
+        minmax(0, 1fr)
+      );
+  }
+}
+
+
+/* =========================================================
+   RESPONSIVE - TABLET
+========================================================= */
+
+@media (
+  max-width: 760px
+) {
+  .detail-page {
+    padding:
+      110px 20px
+      70px;
+  }
+
+
+  .detail-container {
+    gap: 35px;
+  }
+
+
+  .detail-title {
+    font-size: 46px;
+  }
+
+
+  .detail-meta {
+    grid-template-columns:
+      1fr;
+
+    gap: 12px;
+  }
+
+
+  .detail-meta > div {
+    padding:
+      17px 18px;
+  }
+
+
+  .detail-actions {
+    display: grid;
+
+    grid-template-columns:
+      1fr;
+  }
+
+
+  .detail-primary-button,
+  .detail-secondary-button {
+    width: 100%;
+  }
+
+
+  .reviews-section {
+    margin-top: 75px;
+
+    padding:
+      28px 20px;
+  }
+
+
+  .reviews-heading {
+    display: grid;
+
+    align-items: start;
+  }
+
+
+  .reviews-summary {
+    justify-items: start;
+  }
+
+
+  .review-card-top {
+    align-items: flex-start;
+  }
+
+
+  .similar-section {
+    margin-top: 75px;
+  }
+
+
+  .similar-section
+  .art-grid {
+    grid-template-columns:
+      1fr;
+  }
+}
+
+
+/* =========================================================
+   RESPONSIVE - MOBILE
+========================================================= */
+
+@media (
+  max-width: 520px
+) {
+  .detail-page {
+    padding:
+      100px 15px
+      60px;
+  }
+
+
+  .detail-image-box {
+    border-radius: 13px;
+  }
+
+
+  .detail-image-box::before {
+    inset: 9px;
+
+    border-radius: 7px;
+  }
+
+
+  .detail-title {
+    font-size: 40px;
+  }
+
+
+  .detail-description {
+    font-size: 15px;
+  }
+
+
+  .detail-price {
+    font-size: 41px;
+  }
+
+
+  .reviews-section {
+    padding:
+      23px 15px;
+
+    border-radius: 14px;
+  }
+
+
+  .reviews-heading h2 {
+    font-size: 38px;
+  }
+
+
+  .review-card {
+    padding: 18px;
+  }
+
+
+  .review-card-top {
+    display: grid;
+
+    justify-content: stretch;
+  }
+
+
+  .review-form-panel {
+    padding:
+      21px 17px;
+  }
+
+
+  .review-form-actions {
+    display: grid;
+  }
+
+
+  .review-form-actions
+  .detail-primary-button,
+  .review-form-actions
+  .detail-secondary-button {
+    width: 100%;
+  }
+
+
+  .reviews-empty-state {
+    min-height: 235px;
+
+    padding:
+      30px 18px;
+  }
+}
+
+
+/* =========================================================
+   ACCESSIBILITY
+========================================================= */
+
+.detail-page
+button:focus-visible,
+.detail-page
+textarea:focus-visible {
+  outline:
+    2px solid
+    var(--gold);
+
+  outline-offset: 3px;
+}
+
+
+@media (
+  prefers-reduced-motion:
+  reduce
+) {
+  .detail-page *,
+  .detail-page *::before,
+  .detail-page *::after {
+    scroll-behavior: auto !important;
+
+    animation-duration:
+      0.01ms !important;
+
+    animation-iteration-count:
+      1 !important;
+
+    transition-duration:
+      0.01ms !important;
+  }
+}

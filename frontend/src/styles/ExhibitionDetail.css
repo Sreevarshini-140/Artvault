@@ -1,0 +1,1112 @@
+.exhibition-detail-page {
+  min-height: 100vh;
+  background: var(--page-bg, #f8f6f1);
+  color: var(--text-color, #201e1a);
+}
+
+.exhibition-detail-loading,
+.exhibition-detail-error {
+  min-height: 70vh;
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: 1rem;
+  padding: 3rem 1.25rem;
+  text-align: center;
+}
+
+.exhibition-detail-loading svg,
+.exhibition-detail-error > svg {
+  color: var(--gold, #c9a96e);
+}
+
+.exhibition-detail-loading p,
+.exhibition-detail-error p {
+  max-width: 520px;
+  margin: 0;
+  color: var(--muted-text, #77736c);
+  line-height: 1.7;
+}
+
+.exhibition-detail-error h1 {
+  margin: 0;
+}
+
+.exhibition-error-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+/* =========================================================
+   FULL-SCREEN POSTER HERO
+========================================================= */
+
+.exhibition-detail-hero {
+  position: relative;
+
+  width: 100%;
+
+  /*
+    Navbar height = 72px.
+    The hero occupies the remaining visible screen.
+  */
+  height: calc(100vh - 72px);
+  min-height: 620px;
+
+  margin-top: 72px;
+
+  overflow: hidden;
+
+  background: #080706;
+}
+
+.exhibition-detail-back-wrapper {
+  position: absolute;
+  top: 1.35rem;
+  left: 50%;
+  z-index: 20;
+
+  width: 100%;
+
+  transform: translateX(-50%);
+}
+
+.exhibition-back-button {
+  min-height: 42px;
+
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  padding: 0 1rem;
+
+  border: 1px solid rgba(255, 255, 255, 0.26);
+  border-radius: 999px;
+
+  background: rgba(7, 7, 6, 0.72);
+  color: #ffffff;
+
+  font: inherit;
+  font-size: 0.78rem;
+  font-weight: 750;
+
+  cursor: pointer;
+
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+
+  box-shadow:
+    0 12px 34px rgba(0, 0, 0, 0.3);
+
+  transition:
+    transform 180ms ease,
+    background 180ms ease,
+    border-color 180ms ease;
+}
+
+.exhibition-back-button:hover {
+  transform: translateY(-2px);
+
+  border-color:
+    rgba(215, 182, 109, 0.62);
+
+  background:
+    rgba(13, 13, 12, 0.92);
+}
+
+.exhibition-detail-banner {
+  position: relative;
+
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  overflow: hidden;
+
+  background:
+    radial-gradient(
+      circle at center,
+      rgba(201, 169, 110, 0.08),
+      transparent 46%
+    ),
+    #080706;
+}
+
+.exhibition-detail-banner > img {
+  position: relative;
+  z-index: 1;
+
+  display: block;
+
+  width: 100%;
+  height: 100%;
+
+  /*
+    contain ensures the full poster is visible
+    without cropping any side.
+  */
+  object-fit: contain;
+  object-position: center center;
+
+  background: #080706;
+
+  transform: scale(1);
+
+  transition:
+    transform 600ms
+      cubic-bezier(0.16, 1, 0.3, 1),
+    filter 350ms ease;
+}
+
+.exhibition-detail-banner:hover > img {
+  transform: scale(1.008);
+  filter: brightness(1.025);
+}
+
+.exhibition-banner-fallback {
+  position: absolute;
+  inset: 0;
+
+  display: grid;
+  place-items: center;
+
+  color: #d6b978;
+
+  background:
+    radial-gradient(
+      circle at 25% 20%,
+      rgba(201, 169, 110, 0.22),
+      transparent 35%
+    ),
+    linear-gradient(
+      135deg,
+      #171511,
+      #2a2419
+    );
+}
+
+.exhibition-banner-overlay {
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+
+  pointer-events: none;
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(0, 0, 0, 0.08),
+      rgba(0, 0, 0, 0.01) 68%,
+      rgba(0, 0, 0, 0.18) 100%
+    );
+}
+
+/* =========================================================
+   INTRODUCTION
+========================================================= */
+
+.exhibition-intro-section {
+  border-top: 1px solid rgba(201, 169, 110, 0.16);
+  border-bottom: 1px solid rgba(201, 169, 110, 0.12);
+  background:
+    radial-gradient(
+      circle at 82% 14%,
+      rgba(201, 169, 110, 0.07),
+      transparent 28%
+    ),
+    linear-gradient(180deg, #12110e, #0c0b09);
+  color: #fff;
+}
+
+.exhibition-intro-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 360px;
+  gap: 5rem;
+  align-items: start;
+  padding-top: 5rem;
+  padding-bottom: 5rem;
+}
+
+.exhibition-intro-copy {
+  max-width: 820px;
+}
+
+.exhibition-hero-badges {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.65rem;
+  margin-bottom: 1.35rem;
+}
+
+.exhibition-lifecycle-badge,
+.exhibition-featured-badge {
+  min-height: 32px;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0 0.78rem;
+  border-radius: 999px;
+  color: #fff;
+  font-size: 0.67rem;
+  font-weight: 850;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  backdrop-filter: blur(10px);
+}
+
+.exhibition-lifecycle-badge.is-live {
+  background: rgba(33, 146, 81, 0.9);
+}
+
+.exhibition-lifecycle-badge.is-upcoming {
+  background: rgba(54, 105, 184, 0.9);
+}
+
+.exhibition-lifecycle-badge.is-closed {
+  background: rgba(91, 91, 91, 0.9);
+}
+
+.exhibition-lifecycle-badge.is-published {
+  background: rgba(189, 146, 59, 0.92);
+}
+
+.exhibition-featured-badge {
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.exhibition-section-eyebrow {
+  display: inline-block;
+  color: var(--gold, #b8914c);
+  font-size: 0.72rem;
+  font-weight: 850;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+.exhibition-intro-copy h1 {
+  max-width: 860px;
+  margin: 0.7rem 0 0;
+  color: #fff8eb;
+  font-family:
+    "Cormorant Garamond",
+    Georgia,
+    "Times New Roman",
+    serif;
+  font-size: clamp(3.2rem, 6vw, 6.2rem);
+  font-weight: 600;
+  line-height: 0.95;
+  letter-spacing: -0.05em;
+}
+
+.exhibition-intro-copy > p {
+  max-width: 760px;
+  margin: 1.7rem 0 0;
+  color: rgba(238, 232, 220, 0.72);
+  font-size: clamp(1rem, 1.4vw, 1.14rem);
+  line-height: 1.82;
+}
+
+.exhibition-intro-summary {
+  padding: 1.35rem;
+  border: 1px solid rgba(201, 169, 110, 0.2);
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.025);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.025);
+}
+
+.exhibition-intro-meta {
+  display: grid;
+  gap: 0.2rem;
+}
+
+.exhibition-intro-meta > div {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  min-height: 62px;
+  padding: 0.7rem 0.75rem;
+  border-radius: 12px;
+  transition: background 180ms ease;
+}
+
+.exhibition-intro-meta > div:hover {
+  background: rgba(201, 169, 110, 0.06);
+}
+
+.exhibition-intro-meta svg {
+  flex: 0 0 auto;
+  color: #d7b66d;
+}
+
+.exhibition-intro-meta span {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.exhibition-intro-meta small {
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 0.66rem;
+  font-weight: 750;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.exhibition-intro-meta strong {
+  margin-top: 0.2rem;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 0.82rem;
+  line-height: 1.4;
+}
+
+.exhibition-intro-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.7rem;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* =========================================================
+   MAIN SECTIONS
+========================================================= */
+
+.exhibition-detail-main,
+.exhibition-artworks-section,
+.exhibition-curator-section,
+.exhibition-artists-section,
+.exhibition-related-section {
+  padding-top: 5rem;
+}
+
+.exhibition-related-section {
+  padding-bottom: 7rem;
+}
+
+.exhibition-detail-alert {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  padding: 1rem 1.1rem;
+  border: 1px solid rgba(196, 66, 66, 0.22);
+  border-radius: 14px;
+  background: rgba(196, 66, 66, 0.08);
+  color: #b44040;
+  font-size: 0.88rem;
+  font-weight: 700;
+}
+
+.exhibition-detail-alert button {
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font-size: 1.25rem;
+  cursor: pointer;
+}
+
+.exhibition-detail-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 360px;
+  gap: 4rem;
+  align-items: start;
+}
+
+.exhibition-story h2,
+.exhibition-section-heading h2,
+.exhibition-curator-content h2 {
+  margin: 0.6rem 0 0;
+  font-family:
+    "Cormorant Garamond",
+    Georgia,
+    serif;
+  font-size: clamp(2rem, 4vw, 3.5rem);
+  font-weight: 600;
+  line-height: 1.08;
+  letter-spacing: -0.035em;
+}
+
+.exhibition-story > p {
+  max-width: 800px;
+  margin: 1.3rem 0 0;
+  color: var(--muted-text, #69655e);
+  font-size: 1.04rem;
+  line-height: 1.95;
+  white-space: pre-line;
+}
+
+.exhibition-story blockquote {
+  margin: 2rem 0 0;
+  padding: 1.5rem 1.6rem;
+  border-left: 3px solid var(--gold, #c9a96e);
+  border-radius: 0 16px 16px 0;
+  background: rgba(201, 169, 110, 0.09);
+  color: var(--text-color, #201e1a);
+  font-size: 1rem;
+  font-style: italic;
+  line-height: 1.8;
+}
+
+/* =========================================================
+   INFORMATION CARD
+========================================================= */
+
+.exhibition-information-card {
+  position: sticky;
+  top: 110px;
+  padding: 1.3rem;
+  border: 1px solid
+    var(--border-color, rgba(31, 29, 25, 0.12));
+  border-radius: 22px;
+  background: var(--card-bg, #fff);
+  box-shadow: 0 22px 55px rgba(32, 29, 23, 0.08);
+}
+
+.exhibition-info-heading {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid
+    var(--border-color, rgba(31, 29, 25, 0.1));
+}
+
+.exhibition-info-heading > svg,
+.exhibition-information-list svg {
+  color: var(--gold, #b8914c);
+}
+
+.exhibition-info-heading div,
+.exhibition-information-list span {
+  display: flex;
+  flex-direction: column;
+}
+
+.exhibition-info-heading span,
+.exhibition-information-list small {
+  color: var(--muted-text, #77736c);
+  font-size: 0.68rem;
+}
+
+.exhibition-info-heading strong {
+  margin-top: 0.15rem;
+}
+
+.exhibition-information-list {
+  display: grid;
+  gap: 0.25rem;
+  padding: 0.9rem 0 0;
+}
+
+.exhibition-information-list > div {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  min-height: 58px;
+  padding: 0.55rem 0.65rem;
+  border-radius: 12px;
+}
+
+.exhibition-information-list > div:hover {
+  background: rgba(201, 169, 110, 0.07);
+}
+
+.exhibition-information-list strong {
+  margin-top: 0.18rem;
+  font-size: 0.82rem;
+}
+
+/* =========================================================
+   ACTION BUTTONS
+========================================================= */
+
+.exhibition-like-button,
+.exhibition-share-button {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  border-radius: 12px;
+  font: inherit;
+  font-size: 0.78rem;
+  font-weight: 800;
+  cursor: pointer;
+  transition:
+    transform 180ms ease,
+    background 180ms ease,
+    border-color 180ms ease,
+    color 180ms ease;
+}
+
+.exhibition-like-button {
+  border: 1px solid rgba(194, 65, 65, 0.26);
+  background: rgba(194, 65, 65, 0.08);
+  color: #d86868;
+}
+
+.exhibition-like-button.is-liked {
+  border-color: #be4747;
+  background: #be4747;
+  color: #fff;
+}
+
+.exhibition-share-button {
+  border: 1px solid rgba(201, 169, 110, 0.28);
+  background: rgba(201, 169, 110, 0.06);
+  color: #d7b66d;
+}
+
+.exhibition-like-button:hover,
+.exhibition-share-button:hover {
+  transform: translateY(-2px);
+}
+
+.exhibition-like-button:disabled {
+  opacity: 0.55;
+  transform: none;
+  cursor: not-allowed;
+}
+
+/* =========================================================
+   SECTION HEADINGS
+========================================================= */
+
+.exhibition-section-heading {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+.exhibition-section-heading p {
+  max-width: 600px;
+  margin: 0.8rem 0 0;
+  color: var(--muted-text, #77736c);
+  line-height: 1.7;
+}
+
+.exhibition-count-badge {
+  flex: 0 0 auto;
+  padding: 0.65rem 0.9rem;
+  border: 1px solid rgba(201, 169, 110, 0.28);
+  border-radius: 999px;
+  background: rgba(201, 169, 110, 0.08);
+  color: var(--gold, #a9803d);
+  font-size: 0.75rem;
+  font-weight: 800;
+}
+
+/* =========================================================
+   ARTWORK GRID
+========================================================= */
+
+.exhibition-artwork-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.4rem;
+}
+
+.exhibition-artwork-card {
+  overflow: hidden;
+  border: 1px solid
+    var(--border-color, rgba(31, 29, 25, 0.11));
+  border-radius: 20px;
+  background: var(--card-bg, #fff);
+  color: inherit;
+  text-decoration: none;
+  transition:
+    transform 260ms ease,
+    box-shadow 260ms ease,
+    border-color 260ms ease;
+}
+
+.exhibition-artwork-card:hover {
+  transform: translateY(-7px);
+  border-color: rgba(201, 169, 110, 0.48);
+  box-shadow: 0 24px 55px rgba(31, 28, 22, 0.12);
+}
+
+.exhibition-artwork-image {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  background: rgba(201, 169, 110, 0.08);
+}
+
+.exhibition-artwork-image img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  transition: transform 500ms ease;
+}
+
+.exhibition-artwork-card:hover .exhibition-artwork-image img {
+  transform: scale(1.045);
+}
+
+.exhibition-artwork-placeholder,
+.exhibition-related-placeholder {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  place-items: center;
+  color: var(--gold, #b8914c);
+}
+
+.exhibition-artwork-number {
+  position: absolute;
+  top: 0.85rem;
+  left: 0.85rem;
+  min-width: 38px;
+  height: 38px;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(255, 255, 255, 0.26);
+  border-radius: 50%;
+  background: rgba(15, 15, 15, 0.5);
+  color: #fff;
+  font-size: 0.7rem;
+  font-weight: 850;
+  backdrop-filter: blur(10px);
+}
+
+.exhibition-artwork-content {
+  padding: 1rem;
+}
+
+.exhibition-artwork-artist {
+  display: block;
+  color: var(--gold, #a9803d);
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+.exhibition-artwork-content h3 {
+  margin: 0.45rem 0 0;
+  font-size: 1.12rem;
+}
+
+.exhibition-artwork-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.8rem;
+  margin-top: 0.75rem;
+}
+
+.exhibition-artwork-meta span {
+  min-width: 0;
+  overflow: hidden;
+  color: var(--muted-text, #77736c);
+  font-size: 0.76rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.exhibition-artwork-meta strong {
+  flex: 0 0 auto;
+  font-size: 0.8rem;
+}
+
+.exhibition-empty-collection {
+  min-height: 300px;
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: 0.75rem;
+  padding: 2rem;
+  border: 1px dashed rgba(201, 169, 110, 0.35);
+  border-radius: 20px;
+  text-align: center;
+}
+
+.exhibition-empty-collection svg {
+  color: var(--gold, #b8914c);
+}
+
+.exhibition-empty-collection h3,
+.exhibition-empty-collection p {
+  margin: 0;
+}
+
+.exhibition-empty-collection p {
+  max-width: 470px;
+  color: var(--muted-text, #77736c);
+  line-height: 1.7;
+}
+
+/* =========================================================
+   CURATOR
+========================================================= */
+
+.exhibition-curator-card {
+  display: grid;
+  grid-template-columns: 150px 1fr;
+  gap: 2rem;
+  align-items: center;
+  padding: 2rem;
+  border: 1px solid rgba(201, 169, 110, 0.24);
+  border-radius: 26px;
+  background:
+    radial-gradient(
+      circle at top left,
+      rgba(201, 169, 110, 0.18),
+      transparent 34%
+    ),
+    var(--card-bg, #fff);
+}
+
+.exhibition-curator-avatar {
+  width: 150px;
+  height: 150px;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  border: 1px solid rgba(201, 169, 110, 0.34);
+  border-radius: 50%;
+  background: rgba(201, 169, 110, 0.1);
+  color: var(--gold, #b8914c);
+}
+
+.exhibition-curator-avatar img,
+.exhibition-artist-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.exhibition-curator-content p {
+  max-width: 760px;
+  margin: 0.9rem 0 0;
+  color: var(--muted-text, #77736c);
+  line-height: 1.8;
+}
+
+.exhibition-curator-link,
+.exhibition-view-all-link {
+  display: inline-flex;
+  margin-top: 1rem;
+  color: var(--gold, #a9803d);
+  font-size: 0.82rem;
+  font-weight: 850;
+  text-decoration: none;
+}
+
+.exhibition-curator-link:hover,
+.exhibition-view-all-link:hover {
+  text-decoration: underline;
+}
+
+/* =========================================================
+   ARTISTS
+========================================================= */
+
+.exhibition-artist-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.exhibition-artist-card {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  padding: 1rem;
+  border: 1px solid
+    var(--border-color, rgba(31, 29, 25, 0.11));
+  border-radius: 16px;
+  background: var(--card-bg, #fff);
+  color: inherit;
+  text-decoration: none;
+  transition:
+    transform 180ms ease,
+    border-color 180ms ease;
+}
+
+.exhibition-artist-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(201, 169, 110, 0.5);
+}
+
+.exhibition-artist-avatar {
+  width: 52px;
+  height: 52px;
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  overflow: hidden;
+  border-radius: 50%;
+  background: rgba(201, 169, 110, 0.1);
+  color: var(--gold, #b8914c);
+}
+
+.exhibition-artist-card > div:last-child {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.exhibition-artist-card strong {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.exhibition-artist-card span {
+  margin-top: 0.2rem;
+  color: var(--muted-text, #77736c);
+  font-size: 0.72rem;
+}
+
+/* =========================================================
+   RELATED EXHIBITIONS
+========================================================= */
+
+.exhibition-related-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.25rem;
+}
+
+.exhibition-related-card {
+  overflow: hidden;
+  border: 1px solid
+    var(--border-color, rgba(31, 29, 25, 0.11));
+  border-radius: 18px;
+  background: var(--card-bg, #fff);
+  color: inherit;
+  text-decoration: none;
+  transition:
+    transform 220ms ease,
+    box-shadow 220ms ease;
+}
+
+.exhibition-related-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 45px rgba(31, 28, 22, 0.1);
+}
+
+.exhibition-related-image {
+  aspect-ratio: 16 / 8;
+  overflow: hidden;
+  background: rgba(201, 169, 110, 0.08);
+}
+
+.exhibition-related-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 450ms ease;
+}
+
+.exhibition-related-card:hover .exhibition-related-image img {
+  transform: scale(1.04);
+}
+
+.exhibition-related-content {
+  padding: 1rem;
+}
+
+.exhibition-related-content > span {
+  color: var(--gold, #a9803d);
+  font-size: 0.67rem;
+  font-weight: 850;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.exhibition-related-content h3 {
+  margin: 0.4rem 0 0;
+}
+
+.exhibition-related-content p {
+  margin: 0.55rem 0 0;
+  color: var(--muted-text, #77736c);
+  font-size: 0.76rem;
+}
+
+.exhibition-related-loading {
+  min-height: 180px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.65rem;
+  color: var(--muted-text, #77736c);
+}
+
+/* =========================================================
+   ANIMATION
+========================================================= */
+
+.spin {
+  animation: exhibition-spin 850ms linear infinite;
+}
+
+@keyframes exhibition-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 1100px) {
+  .exhibition-intro-layout,
+  .exhibition-detail-layout {
+    grid-template-columns: 1fr;
+    gap: 2.7rem;
+  }
+
+  .exhibition-intro-summary {
+    max-width: 680px;
+  }
+
+  .exhibition-information-card {
+    position: static;
+  }
+
+  .exhibition-artwork-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .exhibition-artist-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 780px) {
+  .exhibition-detail-hero {
+    height: calc(100vh - 64px);
+    min-height: 520px;
+    margin-top: 64px;
+  }
+
+  .exhibition-detail-banner > img {
+    object-fit: contain;
+    object-position: center center;
+  }
+
+  .exhibition-intro-layout {
+    gap: 2.2rem;
+    padding-top: 3.6rem;
+    padding-bottom: 3.8rem;
+  }
+
+  .exhibition-intro-copy h1 {
+    font-size: clamp(3rem, 11vw, 5rem);
+  }
+
+  .exhibition-detail-main,
+  .exhibition-artworks-section,
+  .exhibition-curator-section,
+  .exhibition-artists-section,
+  .exhibition-related-section {
+    padding-top: 3.8rem;
+  }
+
+  .exhibition-section-heading {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .exhibition-related-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .exhibition-curator-card {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+
+  .exhibition-curator-avatar {
+    margin: auto;
+  }
+}
+
+@media (max-width: 580px) {
+  .exhibition-detail-hero {
+    height: calc(100vh - 60px);
+    min-height: 440px;
+    margin-top: 60px;
+  }
+
+  .exhibition-detail-banner > img {
+    object-fit: contain;
+    object-position: center center;
+  }
+
+  .exhibition-detail-back-wrapper {
+    top: 0.85rem;
+  }
+
+  .exhibition-back-button {
+    min-height: 38px;
+    font-size: 0.72rem;
+  }
+
+  .exhibition-intro-layout {
+    padding-top: 2.9rem;
+    padding-bottom: 3.1rem;
+  }
+
+  .exhibition-intro-copy h1 {
+    font-size: clamp(2.6rem, 14vw, 4rem);
+  }
+
+  .exhibition-intro-copy > p {
+    font-size: 0.95rem;
+    line-height: 1.75;
+  }
+
+  .exhibition-intro-summary {
+    padding: 1rem;
+  }
+
+  .exhibition-intro-actions {
+    grid-template-columns: 1fr;
+  }
+
+  .exhibition-artwork-grid,
+  .exhibition-artist-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .exhibition-curator-card {
+    padding: 1.4rem;
+  }
+
+  .exhibition-curator-avatar {
+    width: 120px;
+    height: 120px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .exhibition-back-button,
+  .exhibition-like-button,
+  .exhibition-share-button,
+  .exhibition-artwork-card,
+  .exhibition-artist-card,
+  .exhibition-related-card,
+  .exhibition-artwork-image img,
+  .exhibition-related-image img {
+    transition: none;
+  }
+}

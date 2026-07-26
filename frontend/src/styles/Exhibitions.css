@@ -1,0 +1,725 @@
+/* =========================================================
+   ARTVAULT EXHIBITIONS PAGE
+   File: src/styles/Exhibitions.css
+========================================================= */
+
+.exhibition-list {
+  display: flex;
+  flex-direction: column;
+  gap: 42px;
+
+  width: min(1400px, calc(100% - 48px));
+  margin: 0 auto;
+  padding: 68px 0 90px;
+}
+
+/* =========================================================
+   EXHIBITION ROW
+========================================================= */
+
+.exhibition-row {
+  display: grid;
+  grid-template-columns:
+    minmax(430px, 0.95fr)
+    minmax(430px, 1.05fr);
+
+  min-height: 560px;
+  overflow: hidden;
+
+  border: 1px solid rgba(217, 169, 59, 0.2);
+  border-radius: 20px;
+
+  background:
+    radial-gradient(
+      circle at 82% 18%,
+      rgba(217, 169, 59, 0.065),
+      transparent 31%
+    ),
+    linear-gradient(
+      145deg,
+      #151512,
+      #0b0b0a
+    );
+
+  box-shadow:
+    0 28px 70px rgba(0, 0, 0, 0.34),
+    inset 0 1px 0 rgba(255, 255, 255, 0.025);
+
+  transition:
+    border-color 350ms ease,
+    box-shadow 350ms ease,
+    transform 350ms ease;
+}
+
+.exhibition-row:hover {
+  border-color: rgba(230, 185, 75, 0.42);
+
+  box-shadow:
+    0 34px 85px rgba(0, 0, 0, 0.48),
+    0 0 36px rgba(217, 169, 59, 0.06);
+
+  transform: translateY(-4px);
+}
+
+/* =========================================================
+   ALTERNATE LAYOUT
+========================================================= */
+
+.exhibition-row:nth-child(even) {
+  grid-template-columns:
+    minmax(430px, 1.05fr)
+    minmax(430px, 0.95fr);
+}
+
+.exhibition-row:nth-child(even)
+  .exhibition-art {
+  order: 2;
+}
+
+.exhibition-row:nth-child(even)
+  .exhibition-content {
+  order: 1;
+}
+
+/* =========================================================
+   BANNER / POSTER AREA
+========================================================= */
+
+.exhibition-art {
+  position: relative;
+
+  display: flex;
+  min-width: 0;
+  min-height: 560px;
+
+  align-items: center;
+  justify-content: center;
+
+  overflow: hidden;
+  padding: 18px;
+
+  border-right: 1px solid rgba(217, 169, 59, 0.12);
+
+  background:
+    radial-gradient(
+      circle at 50% 45%,
+      rgba(217, 169, 59, 0.08),
+      transparent 52%
+    ),
+    linear-gradient(
+      145deg,
+      #0c0c0b,
+      #050505
+    );
+}
+
+.exhibition-row:nth-child(even)
+  .exhibition-art {
+  border-right: none;
+  border-left: 1px solid rgba(217, 169, 59, 0.12);
+}
+
+/*
+  IMPORTANT:
+  "contain" displays the complete poster.
+  It does not crop the top, bottom or sides.
+*/
+
+.exhibition-art img {
+  position: relative;
+  z-index: 1;
+
+  display: block;
+
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  max-height: 524px;
+
+  object-fit: contain;
+  object-position: center;
+
+  border: 1px solid rgba(217, 169, 59, 0.18);
+  border-radius: 4px;
+
+  background: #050505;
+
+  box-shadow:
+    0 22px 55px rgba(0, 0, 0, 0.48),
+    0 0 30px rgba(217, 169, 59, 0.035);
+
+  transition:
+    transform 700ms
+      cubic-bezier(0.16, 1, 0.3, 1),
+    filter 450ms ease,
+    box-shadow 450ms ease;
+}
+
+.exhibition-row:hover
+  .exhibition-art img {
+  transform: scale(1.012);
+  filter: brightness(1.04);
+
+  box-shadow:
+    0 27px 65px rgba(0, 0, 0, 0.56),
+    0 0 34px rgba(217, 169, 59, 0.06);
+}
+
+/* Decorative glow behind poster */
+
+.exhibition-art::before {
+  position: absolute;
+  inset: 13% 10%;
+
+  border-radius: 50%;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(217, 169, 59, 0.1),
+      transparent 67%
+    );
+
+  filter: blur(28px);
+
+  content: "";
+  pointer-events: none;
+}
+
+/* Soft overlay */
+
+.exhibition-art::after {
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(0, 0, 0, 0.03),
+      transparent 68%,
+      rgba(0, 0, 0, 0.12)
+    );
+
+  content: "";
+  pointer-events: none;
+}
+
+/* Remove old decorative image backgrounds */
+
+.exhibition-1,
+.exhibition-2,
+.exhibition-3,
+.exhibition-4 {
+  background-image: none;
+}
+
+/* =========================================================
+   STATUS BADGE
+========================================================= */
+
+.exhibition-status {
+  position: absolute;
+  top: 27px;
+  left: 27px;
+  z-index: 5;
+
+  display: inline-flex;
+  min-height: 34px;
+
+  align-items: center;
+  justify-content: center;
+
+  padding: 0 15px;
+
+  border: 1px solid rgba(242, 209, 116, 0.58);
+  border-radius: 999px;
+
+  background: rgba(8, 8, 7, 0.88);
+
+  backdrop-filter: blur(11px);
+  -webkit-backdrop-filter: blur(11px);
+
+  color: #f1cc69;
+
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+
+  box-shadow:
+    0 8px 24px rgba(0, 0, 0, 0.34);
+}
+
+/* =========================================================
+   IMAGE PLACEHOLDER
+========================================================= */
+
+.exhibition-image-placeholder {
+  position: relative;
+  z-index: 1;
+
+  display: flex;
+  width: 100%;
+  min-height: 524px;
+
+  align-items: center;
+  justify-content: center;
+
+  border: 1px solid rgba(217, 169, 59, 0.15);
+  border-radius: 4px;
+
+  background:
+    radial-gradient(
+      circle at center,
+      rgba(217, 169, 59, 0.09),
+      transparent 42%
+    ),
+    #090908;
+
+  color: #b99039;
+}
+
+/* =========================================================
+   CONTENT
+========================================================= */
+
+.exhibition-content {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  justify-content: center;
+
+  padding: 58px 64px;
+}
+
+.exhibition-content .eyebrow {
+  display: block;
+  margin-bottom: 18px;
+
+  color: #d9a93b;
+
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.exhibition-content h2 {
+  margin: 0;
+
+  color: #fff8eb;
+
+  font-family:
+    "Cormorant Garamond",
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size: clamp(43px, 4vw, 61px);
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: -0.035em;
+}
+
+.exhibition-content > p {
+  max-width: 650px;
+  margin: 27px 0 0;
+
+  color: #bbb5aa;
+
+  font-size: 15px;
+  line-height: 1.78;
+}
+
+/* =========================================================
+   META INFORMATION
+========================================================= */
+
+.exhibition-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 11px;
+
+  margin-top: 31px;
+}
+
+.exhibition-meta > span {
+  display: inline-flex;
+  min-height: 39px;
+
+  align-items: center;
+  gap: 8px;
+
+  padding: 0 14px;
+
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 999px;
+
+  background: rgba(255, 255, 255, 0.025);
+
+  color: #d2ccc1;
+
+  font-size: 11px;
+  white-space: nowrap;
+
+  transition:
+    border-color 220ms ease,
+    background 220ms ease;
+}
+
+.exhibition-meta > span:hover {
+  border-color: rgba(217, 169, 59, 0.26);
+  background: rgba(217, 169, 59, 0.035);
+}
+
+.exhibition-meta svg {
+  flex: 0 0 auto;
+
+  color: #dfb64f;
+  stroke-width: 1.7;
+}
+
+/* =========================================================
+   CURATOR
+========================================================= */
+
+.exhibition-curator {
+  margin-top: 22px;
+
+  color: #8f8a81;
+
+  font-size: 12px;
+}
+
+.exhibition-curator strong {
+  color: #eee6d8;
+  font-weight: 700;
+}
+
+/* =========================================================
+   ENTER BUTTON
+========================================================= */
+
+.exhibition-content
+  .btn.secondary {
+  display: inline-flex;
+  width: fit-content;
+  min-width: 190px;
+  min-height: 51px;
+
+  align-items: center;
+  justify-content: center;
+
+  margin-top: 29px;
+  padding: 0 25px;
+
+  border: 1px solid rgba(217, 169, 59, 0.64);
+  border-radius: 7px;
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(217, 169, 59, 0.065),
+      rgba(217, 169, 59, 0.015)
+    );
+
+  color: #efd078;
+
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  text-decoration: none;
+
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.035);
+
+  transition:
+    background 260ms ease,
+    border-color 260ms ease,
+    box-shadow 260ms ease,
+    color 260ms ease,
+    transform 260ms ease;
+}
+
+.exhibition-content
+  .btn.secondary:hover {
+  border-color: #e3b74c;
+
+  background:
+    linear-gradient(
+      135deg,
+      #efd071,
+      #ca9227
+    );
+
+  color: #0b0905;
+
+  box-shadow:
+    0 12px 30px rgba(217, 169, 59, 0.2);
+
+  transform: translateY(-2px);
+}
+
+/* =========================================================
+   ERROR, LOADING AND EMPTY STATES
+========================================================= */
+
+.exhibition-error {
+  padding: 15px 18px;
+
+  border: 1px solid rgba(219, 79, 79, 0.4);
+  border-radius: 9px;
+
+  background: rgba(219, 79, 79, 0.08);
+
+  color: #efaaaa;
+
+  font-size: 13px;
+}
+
+.exhibition-loading,
+.exhibition-empty-state {
+  display: flex;
+  min-height: 380px;
+  flex-direction: column;
+
+  align-items: center;
+  justify-content: center;
+  gap: 13px;
+
+  padding: 45px;
+
+  border: 1px solid rgba(217, 169, 59, 0.15);
+  border-radius: 18px;
+
+  background:
+    radial-gradient(
+      circle at center,
+      rgba(217, 169, 59, 0.05),
+      transparent 38%
+    ),
+    #0d0d0c;
+
+  color: #a9a399;
+  text-align: center;
+}
+
+.exhibition-empty-state h2 {
+  margin: 8px 0 0;
+
+  color: #f3ecdf;
+
+  font-family:
+    "Cormorant Garamond",
+    Georgia,
+    serif;
+
+  font-size: 31px;
+  font-weight: 600;
+}
+
+.exhibition-empty-state p,
+.exhibition-loading p {
+  margin: 0;
+
+  color: #969087;
+
+  font-size: 13px;
+}
+
+.exhibition-empty-state svg {
+  color: #d7aa42;
+}
+
+.exhibition-loading svg {
+  color: #e2b850;
+}
+
+.exhibition-loading .spin {
+  animation:
+    exhibition-spin
+    850ms linear infinite;
+}
+
+@keyframes exhibition-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* =========================================================
+   RESPONSIVE: TABLETS
+========================================================= */
+
+@media (max-width: 1100px) {
+  .exhibition-row,
+  .exhibition-row:nth-child(even) {
+    grid-template-columns: 1fr;
+  }
+
+  .exhibition-row:nth-child(even)
+    .exhibition-art,
+  .exhibition-row:nth-child(even)
+    .exhibition-content {
+    order: initial;
+  }
+
+  .exhibition-art,
+  .exhibition-row:nth-child(even)
+    .exhibition-art {
+    min-height: 580px;
+
+    border-right: none;
+    border-left: none;
+    border-bottom: 1px solid
+      rgba(217, 169, 59, 0.12);
+  }
+
+  .exhibition-art img {
+    max-height: 544px;
+  }
+
+  .exhibition-image-placeholder {
+    min-height: 544px;
+  }
+
+  .exhibition-content {
+    padding: 46px 44px 50px;
+  }
+}
+
+/* =========================================================
+   RESPONSIVE: MOBILE
+========================================================= */
+
+@media (max-width: 720px) {
+  .exhibition-list {
+    width: calc(100% - 28px);
+    gap: 28px;
+
+    padding: 42px 0 65px;
+  }
+
+  .exhibition-row {
+    min-height: 0;
+    border-radius: 15px;
+  }
+
+  .exhibition-art,
+  .exhibition-row:nth-child(even)
+    .exhibition-art {
+    min-height: 0;
+    padding: 12px;
+  }
+
+  .exhibition-art img {
+    width: 100%;
+    height: auto;
+    max-height: none;
+
+    object-fit: contain;
+  }
+
+  .exhibition-image-placeholder {
+    min-height: 340px;
+  }
+
+  .exhibition-status {
+    top: 22px;
+    left: 22px;
+  }
+
+  .exhibition-content {
+    padding: 34px 26px 39px;
+  }
+
+  .exhibition-content h2 {
+    font-size: 39px;
+  }
+
+  .exhibition-content > p {
+    margin-top: 20px;
+
+    font-size: 13px;
+    line-height: 1.72;
+  }
+
+  .exhibition-meta {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .exhibition-meta > span {
+    width: fit-content;
+    white-space: normal;
+  }
+}
+
+/* =========================================================
+   RESPONSIVE: SMALL MOBILE
+========================================================= */
+
+@media (max-width: 440px) {
+  .exhibition-list {
+    width: calc(100% - 20px);
+  }
+
+  .exhibition-art,
+  .exhibition-row:nth-child(even)
+    .exhibition-art {
+    padding: 9px;
+  }
+
+  .exhibition-status {
+    top: 18px;
+    left: 18px;
+
+    min-height: 31px;
+    padding: 0 12px;
+
+    font-size: 9px;
+  }
+
+  .exhibition-image-placeholder {
+    min-height: 280px;
+  }
+
+  .exhibition-content {
+    padding: 29px 20px 34px;
+  }
+
+  .exhibition-content h2 {
+    font-size: 34px;
+  }
+
+  .exhibition-content
+    .btn.secondary {
+    width: 100%;
+  }
+}
+
+/* =========================================================
+   REDUCED MOTION
+========================================================= */
+
+@media (
+  prefers-reduced-motion: reduce
+) {
+  .exhibition-row,
+  .exhibition-art img,
+  .exhibition-meta > span,
+  .exhibition-content
+    .btn.secondary {
+    transition: none;
+  }
+
+  .exhibition-row:hover {
+    transform: none;
+  }
+
+  .exhibition-row:hover
+    .exhibition-art img {
+    transform: none;
+  }
+}

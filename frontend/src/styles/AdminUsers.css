@@ -1,0 +1,710 @@
+/* =========================================================
+   ARTVAULT ADMIN USER MANAGEMENT
+   File: src/styles/AdminUsers.css
+========================================================= */
+
+.admin-users-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+
+  margin-bottom: 18px;
+}
+
+.admin-users-summary-card {
+  min-height: 112px;
+
+  display: flex;
+  align-items: center;
+  gap: 16px;
+
+  padding: 18px;
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(17, 20, 20, 0.98),
+      rgba(9, 11, 11, 0.98)
+    );
+
+  border: 1px solid
+    rgba(255, 255, 255, 0.09);
+  border-radius: 14px;
+
+  transition:
+    transform 180ms ease,
+    border-color 180ms ease,
+    box-shadow 180ms ease;
+}
+
+.admin-users-summary-card:hover {
+  transform: translateY(-3px);
+
+  border-color:
+    rgba(224, 169, 61, 0.24);
+
+  box-shadow:
+    0 18px 42px
+    rgba(0, 0, 0, 0.24);
+}
+
+.admin-users-summary-card > svg {
+  width: 50px;
+  height: 50px;
+
+  padding: 13px;
+
+  flex-shrink: 0;
+
+  color: #e0a93d;
+
+  background:
+    rgba(224, 169, 61, 0.07);
+
+  border: 1px solid
+    rgba(224, 169, 61, 0.2);
+  border-radius: 50%;
+}
+
+.admin-users-summary-card > div {
+  display: grid;
+  gap: 4px;
+}
+
+.admin-users-summary-card span {
+  color: #a8aca8;
+  font-size: 12px;
+}
+
+.admin-users-summary-card strong {
+  color: #f4f1e9;
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size: 27px;
+  font-weight: 500;
+}
+
+
+/* =========================================================
+   MAIN PANEL
+========================================================= */
+
+.admin-users-panel {
+  padding: 18px;
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(15, 18, 18, 0.98),
+      rgba(8, 10, 10, 0.98)
+    );
+
+  border: 1px solid
+    rgba(255, 255, 255, 0.09);
+  border-radius: 14px;
+}
+
+
+/* =========================================================
+   TOOLBAR
+========================================================= */
+
+.admin-users-toolbar {
+  display: grid;
+  grid-template-columns:
+    minmax(260px, 1fr)
+    180px
+    180px
+    auto;
+
+  align-items: center;
+  gap: 12px;
+
+  margin-bottom: 16px;
+}
+
+.admin-users-search {
+  min-height: 44px;
+
+  display: flex;
+  align-items: center;
+  gap: 11px;
+
+  padding: 0 14px;
+
+  color: #8d918e;
+
+  background:
+    rgba(255, 255, 255, 0.025);
+
+  border: 1px solid
+    rgba(255, 255, 255, 0.13);
+  border-radius: 10px;
+
+  transition:
+    border-color 170ms ease,
+    box-shadow 170ms ease,
+    background 170ms ease;
+}
+
+.admin-users-search:focus-within {
+  border-color:
+    rgba(224, 169, 61, 0.52);
+
+  background:
+    rgba(255, 255, 255, 0.035);
+
+  box-shadow:
+    0 0 0 3px
+    rgba(224, 169, 61, 0.08);
+}
+
+.admin-users-search input {
+  width: 100%;
+  min-width: 0;
+
+  color: #f3f1eb;
+  background: transparent;
+
+  border: 0;
+  outline: 0;
+
+  font: inherit;
+  font-size: 13px;
+}
+
+.admin-users-search input::placeholder {
+  color: #777b78;
+}
+
+.admin-users-toolbar select {
+  min-height: 44px;
+
+  padding: 0 13px;
+
+  color: #eeece6;
+  background: #0b0e0e;
+
+  border: 1px solid
+    rgba(255, 255, 255, 0.13);
+  border-radius: 10px;
+
+  outline: 0;
+  font: inherit;
+  font-size: 12px;
+
+  cursor: pointer;
+
+  transition:
+    border-color 170ms ease,
+    box-shadow 170ms ease;
+}
+
+.admin-users-toolbar select:focus {
+  border-color:
+    rgba(224, 169, 61, 0.52);
+
+  box-shadow:
+    0 0 0 3px
+    rgba(224, 169, 61, 0.08);
+}
+
+.admin-users-refresh {
+  min-height: 44px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
+  padding: 0 15px;
+
+  color: #e9bc62;
+  background:
+    rgba(224, 169, 61, 0.07);
+
+  border: 1px solid
+    rgba(224, 169, 61, 0.21);
+  border-radius: 10px;
+
+  font-size: 12px;
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition:
+    color 170ms ease,
+    background 170ms ease,
+    transform 170ms ease;
+}
+
+.admin-users-refresh:hover:not(:disabled) {
+  color: #161005;
+  background: #e0a93d;
+
+  transform: translateY(-2px);
+}
+
+.admin-users-refresh:disabled {
+  opacity: 0.58;
+  cursor: not-allowed;
+}
+
+.admin-users-spin {
+  animation:
+    adminUsersSpin 750ms linear infinite;
+}
+
+@keyframes adminUsersSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+
+/* =========================================================
+   ERROR
+========================================================= */
+
+.admin-users-error {
+  margin-bottom: 14px;
+  padding: 12px 14px;
+
+  color: #ffb6b6;
+  background:
+    rgba(255, 83, 83, 0.08);
+
+  border: 1px solid
+    rgba(255, 88, 88, 0.21);
+  border-radius: 9px;
+
+  font-size: 12px;
+}
+
+
+/* =========================================================
+   TABLE
+========================================================= */
+
+.admin-users-panel .table-wrap {
+  overflow-x: auto;
+
+  border: 1px solid
+    rgba(255, 255, 255, 0.07);
+  border-radius: 11px;
+}
+
+.admin-users-panel table {
+  width: 100%;
+  min-width: 980px;
+
+  border-collapse: collapse;
+
+  background:
+    rgba(255, 255, 255, 0.012);
+}
+
+.admin-users-panel thead {
+  background:
+    rgba(255, 255, 255, 0.035);
+}
+
+.admin-users-panel th {
+  padding: 14px 16px;
+
+  color: #b7bbb7;
+
+  border-bottom: 1px solid
+    rgba(255, 255, 255, 0.08);
+
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.7px;
+  text-align: left;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.admin-users-panel td {
+  padding: 14px 16px;
+
+  color: #dadcd8;
+
+  border-bottom: 1px solid
+    rgba(255, 255, 255, 0.055);
+
+  font-size: 12px;
+  vertical-align: middle;
+}
+
+.admin-users-panel tbody tr {
+  transition:
+    background 160ms ease;
+}
+
+.admin-users-panel tbody tr:hover {
+  background:
+    rgba(224, 169, 61, 0.035);
+}
+
+.admin-users-panel tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+
+/* =========================================================
+   USER IDENTITY
+========================================================= */
+
+.admin-user-identity {
+  min-width: 220px;
+
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.admin-user-avatar {
+  width: 40px;
+  height: 40px;
+
+  display: grid;
+  place-items: center;
+
+  flex-shrink: 0;
+
+  color: #171108;
+  background:
+    linear-gradient(
+      135deg,
+      #f0c96f,
+      #9e6a18
+    );
+
+  border-radius: 50%;
+
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.admin-user-identity > div {
+  min-width: 0;
+
+  display: grid;
+  gap: 3px;
+}
+
+.admin-user-identity strong {
+  overflow: hidden;
+
+  color: #f3f1ec;
+  font-size: 12px;
+  font-weight: 600;
+
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.admin-user-identity span {
+  overflow: hidden;
+
+  color: #8f938f;
+  font-size: 10px;
+
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.admin-user-role {
+  display: inline-flex;
+  align-items: center;
+
+  padding: 5px 9px;
+
+  color: #e6bc69;
+  background:
+    rgba(224, 169, 61, 0.07);
+
+  border: 1px solid
+    rgba(224, 169, 61, 0.18);
+  border-radius: 999px;
+
+  font-size: 10px;
+  font-weight: 700;
+}
+
+
+/* =========================================================
+   STATUS PILLS
+========================================================= */
+
+.admin-users-panel .status {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  min-width: 76px;
+
+  padding: 5px 9px;
+
+  border: 1px solid;
+  border-radius: 999px;
+
+  font-size: 9px;
+  font-weight: 700;
+}
+
+.admin-users-panel .status.success {
+  color: #64d98f;
+  background:
+    rgba(66, 205, 120, 0.07);
+
+  border-color:
+    rgba(66, 205, 120, 0.19);
+}
+
+.admin-users-panel .status.warning {
+  color: #efbf5e;
+  background:
+    rgba(224, 169, 61, 0.07);
+
+  border-color:
+    rgba(224, 169, 61, 0.2);
+}
+
+.admin-users-panel .status.danger {
+  color: #ff7777;
+  background:
+    rgba(255, 88, 88, 0.07);
+
+  border-color:
+    rgba(255, 88, 88, 0.19);
+}
+
+
+/* =========================================================
+   ACTION BUTTONS
+========================================================= */
+
+.admin-user-action {
+  min-height: 34px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+
+  padding: 0 11px;
+
+  background: transparent;
+
+  border: 1px solid;
+  border-radius: 8px;
+
+  font: inherit;
+  font-size: 10px;
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition:
+    color 160ms ease,
+    background 160ms ease,
+    transform 160ms ease;
+}
+
+.admin-user-action:hover:not(:disabled) {
+  transform: translateY(-1px);
+}
+
+.admin-user-action-danger {
+  color: #ff7777;
+  border-color:
+    rgba(255, 96, 96, 0.24);
+}
+
+.admin-user-action-danger:hover:not(:disabled) {
+  background:
+    rgba(255, 88, 88, 0.09);
+}
+
+.admin-user-action-success {
+  color: #66da91;
+  border-color:
+    rgba(66, 205, 120, 0.23);
+}
+
+.admin-user-action-success:hover:not(:disabled) {
+  background:
+    rgba(66, 205, 120, 0.09);
+}
+
+.admin-user-action:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.admin-current-user-note {
+  display: block;
+
+  margin-top: 5px;
+
+  color: #888c89;
+  font-size: 8px;
+}
+
+
+/* =========================================================
+   LOADING / EMPTY
+========================================================= */
+
+.admin-users-message {
+  height: 190px;
+
+  color: #8f938f !important;
+  text-align: center;
+
+  font-size: 12px !important;
+}
+
+
+/* =========================================================
+   PAGINATION
+========================================================= */
+
+.admin-users-pagination {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 14px;
+
+  margin-top: 16px;
+}
+
+.admin-users-pagination > span {
+  color: #8f938f;
+  font-size: 11px;
+}
+
+.admin-users-pagination > div {
+  display: flex;
+  gap: 9px;
+}
+
+.admin-users-pagination button {
+  min-height: 36px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+
+  padding: 0 12px;
+
+  color: #e6e5df;
+  background:
+    rgba(255, 255, 255, 0.025);
+
+  border: 1px solid
+    rgba(255, 255, 255, 0.11);
+  border-radius: 8px;
+
+  font: inherit;
+  font-size: 10px;
+
+  cursor: pointer;
+
+  transition:
+    color 160ms ease,
+    border-color 160ms ease,
+    background 160ms ease;
+}
+
+.admin-users-pagination button:hover:not(:disabled) {
+  color: #efc46d;
+
+  background:
+    rgba(224, 169, 61, 0.06);
+
+  border-color:
+    rgba(224, 169, 61, 0.22);
+}
+
+.admin-users-pagination button:disabled {
+  opacity: 0.42;
+  cursor: not-allowed;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 1100px) {
+  .admin-users-summary-grid {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+  }
+
+  .admin-users-toolbar {
+    grid-template-columns:
+      minmax(240px, 1fr)
+      160px
+      160px;
+  }
+
+  .admin-users-refresh {
+    grid-column: 1 / -1;
+    width: fit-content;
+  }
+}
+
+@media (max-width: 760px) {
+  .admin-users-summary-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-users-toolbar {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-users-refresh {
+    width: 100%;
+  }
+
+  .admin-users-panel {
+    padding: 13px;
+  }
+
+  .admin-users-pagination {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 520px) {
+  .admin-users-summary-card {
+    min-height: 96px;
+  }
+
+  .admin-users-summary-card > svg {
+    width: 44px;
+    height: 44px;
+  }
+
+  .admin-users-summary-card strong {
+    font-size: 24px;
+  }
+
+  .admin-users-pagination > div {
+    width: 100%;
+  }
+
+  .admin-users-pagination button {
+    flex: 1;
+  }
+}

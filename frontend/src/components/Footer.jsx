@@ -1,0 +1,1 @@
+export default function Footer(){return <footer><div><strong>ARTVAULT</strong><p>Where timeless art meets modern collecting.</p></div><p>© 2026 ArtVault. Educational production-ready portfolio project.</p></footer>}

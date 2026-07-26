@@ -1,0 +1,1158 @@
+/* =========================================================
+   ARTVAULT INTERACTIVE PREMIUM ARTWORK CARD
+========================================================= */
+
+:root {
+  --art-card-gold: #c99a35;
+  --art-card-gold-light: #e9c967;
+  --art-card-gold-bright: #f3d578;
+
+  --art-card-cream: #f6efe2;
+  --art-card-muted: #9b958d;
+
+  --art-card-surface: #0a0b0a;
+  --art-card-border:
+    rgba(201, 154, 53, 0.3);
+
+  --art-card-motion:
+    cubic-bezier(
+      0.16,
+      1,
+      0.3,
+      1
+    );
+}
+
+/* =========================================================
+   CARD
+========================================================= */
+
+.artvault-card {
+  position: relative;
+
+  width: 100%;
+  min-width: 0;
+  height: 100%;
+
+  overflow: hidden;
+
+  border:
+    1px solid
+    var(--art-card-border);
+
+  border-radius: 18px;
+  outline: none;
+
+  background:
+    radial-gradient(
+      circle at top right,
+      rgba(201, 154, 53, 0.045),
+      transparent 35%
+    ),
+    linear-gradient(
+      145deg,
+      #141512,
+      #080908
+    );
+
+  box-shadow:
+    0 18px 42px
+      rgba(0, 0, 0, 0.34),
+    inset 0 1px 0
+      rgba(255, 255, 255, 0.025);
+
+  cursor: pointer;
+  isolation: isolate;
+
+  transition:
+    transform 560ms
+      var(--art-card-motion),
+    border-color 420ms ease,
+    box-shadow 560ms ease,
+    background 420ms ease;
+}
+
+.artvault-card::before {
+  position: absolute;
+  inset: -45%;
+  z-index: 0;
+
+  background:
+    linear-gradient(
+      115deg,
+      transparent 40%,
+      rgba(233, 201, 103, 0.045)
+        48%,
+      rgba(255, 255, 255, 0.018)
+        51%,
+      transparent 62%
+    );
+
+  content: "";
+  opacity: 0;
+  pointer-events: none;
+
+  transform:
+    translateX(-26%)
+    rotate(8deg);
+
+  transition:
+    opacity 420ms ease,
+    transform 1s
+      var(--art-card-motion);
+}
+
+.artvault-card:hover,
+.artvault-card:focus-visible {
+  border-color:
+    rgba(233, 201, 103, 0.82);
+
+  background:
+    radial-gradient(
+      circle at top right,
+      rgba(201, 154, 53, 0.075),
+      transparent 35%
+    ),
+    linear-gradient(
+      145deg,
+      #171813,
+      #090a09
+    );
+
+  box-shadow:
+    0 32px 68px
+      rgba(0, 0, 0, 0.52),
+    0 0 0 1px
+      rgba(233, 201, 103, 0.08),
+    0 0 30px
+      rgba(201, 154, 53, 0.09);
+
+  transform:
+    translateY(-8px)
+    scale(1.006);
+}
+
+.artvault-card:hover::before,
+.artvault-card:focus-visible::before {
+  opacity: 0.65;
+
+  transform:
+    translateX(28%)
+    rotate(8deg);
+}
+
+.artvault-card:focus-visible {
+  box-shadow:
+    0 0 0 3px
+      rgba(233, 201, 103, 0.16),
+    0 30px 64px
+      rgba(0, 0, 0, 0.5);
+}
+
+.artvault-card-link {
+  position: relative;
+  z-index: 1;
+
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+
+  color: inherit;
+  text-decoration: none;
+}
+
+/* =========================================================
+   IMAGE
+========================================================= */
+
+.artvault-card-image-wrap {
+  position: relative;
+
+  margin: 11px;
+  overflow: hidden;
+
+  aspect-ratio: 4 / 4.5;
+
+  border:
+    1px solid
+    rgba(255, 255, 255, 0.055);
+
+  border-radius: 14px;
+
+  background: #111111;
+
+  box-shadow:
+    0 12px 28px
+      rgba(0, 0, 0, 0.31);
+
+  transition:
+    border-color 420ms ease,
+    box-shadow 460ms ease,
+    transform 560ms
+      var(--art-card-motion);
+}
+
+.artvault-card:hover
+  .artvault-card-image-wrap,
+.artvault-card:focus-visible
+  .artvault-card-image-wrap {
+  border-color:
+    rgba(233, 201, 103, 0.28);
+
+  box-shadow:
+    0 20px 44px
+      rgba(0, 0, 0, 0.44);
+
+  transform:
+    translateY(-2px);
+}
+
+.artvault-card-image {
+  display: block;
+
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+  object-position: center;
+
+  filter:
+    brightness(0.95)
+    contrast(1.03)
+    saturate(0.96);
+
+  transform:
+    scale(1.001);
+
+  transition:
+    transform 920ms
+      var(--art-card-motion),
+    filter 580ms ease;
+}
+
+.artvault-card:hover
+  .artvault-card-image,
+.artvault-card:focus-visible
+  .artvault-card-image {
+  filter:
+    brightness(1.035)
+    contrast(1.055)
+    saturate(1.03);
+
+  transform:
+    scale(1.065);
+}
+
+.artvault-card-image-shade {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(0, 0, 0, 0.16),
+      transparent 28%,
+      transparent 60%,
+      rgba(0, 0, 0, 0.68)
+    );
+
+  pointer-events: none;
+
+  transition:
+    background 420ms ease;
+}
+
+.artvault-card:hover
+  .artvault-card-image-shade,
+.artvault-card:focus-visible
+  .artvault-card-image-shade {
+  background:
+    linear-gradient(
+      180deg,
+      rgba(0, 0, 0, 0.11),
+      transparent 24%,
+      transparent 46%,
+      rgba(0, 0, 0, 0.78)
+    );
+}
+
+/* Gold reflection */
+
+.artvault-card-image-wrap::after {
+  position: absolute;
+  top: -45%;
+  left: -72%;
+  z-index: 3;
+
+  width: 35%;
+  height: 190%;
+
+  background:
+    linear-gradient(
+      90deg,
+      transparent,
+      rgba(233, 201, 103, 0.06),
+      rgba(255, 255, 255, 0.026),
+      transparent
+    );
+
+  content: "";
+  pointer-events: none;
+
+  transform:
+    rotate(16deg);
+
+  transition:
+    left 1s
+      var(--art-card-motion);
+}
+
+.artvault-card:hover
+  .artvault-card-image-wrap::after,
+.artvault-card:focus-visible
+  .artvault-card-image-wrap::after {
+  left: 145%;
+}
+
+/* =========================================================
+   PLACEHOLDER
+========================================================= */
+
+.artvault-card-placeholder {
+  display: flex;
+
+  width: 100%;
+  height: 100%;
+
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 11px;
+
+  background:
+    radial-gradient(
+      circle at center,
+      rgba(201, 154, 53, 0.06),
+      transparent 46%
+    ),
+    linear-gradient(
+      145deg,
+      #151614,
+      #090a09
+    );
+
+  color: #777169;
+}
+
+.artvault-card-placeholder svg {
+  color:
+    rgba(233, 201, 103, 0.5);
+}
+
+.artvault-card-placeholder span {
+  font-size: 12px;
+}
+
+/* =========================================================
+   BADGE
+========================================================= */
+
+.artvault-card-badge {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  z-index: 6;
+
+  padding: 7px 12px;
+
+  border:
+    1px solid
+    rgba(233, 201, 103, 0.54);
+
+  border-radius: 5px;
+
+  background:
+    rgba(8, 8, 8, 0.82);
+
+  box-shadow:
+    0 7px 18px
+      rgba(0, 0, 0, 0.31);
+
+  color:
+    var(--art-card-gold-light);
+
+  font-family:
+    "Inter",
+    "Segoe UI",
+    sans-serif;
+
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+
+  backdrop-filter: blur(8px);
+
+  transition:
+    border-color 280ms ease,
+    background 280ms ease,
+    color 280ms ease,
+    transform 340ms
+      var(--art-card-motion);
+}
+
+.artvault-card:hover
+  .artvault-card-badge,
+.artvault-card:focus-visible
+  .artvault-card-badge {
+  border-color:
+    var(--art-card-gold-bright);
+
+  background:
+    rgba(17, 14, 8, 0.9);
+
+  color:
+    var(--art-card-gold-bright);
+
+  transform:
+    translateY(-1px);
+}
+
+/* =========================================================
+   WISHLIST
+========================================================= */
+
+.artvault-card-wishlist {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  z-index: 7;
+
+  display: grid;
+
+  width: 43px;
+  height: 43px;
+
+  padding: 0;
+
+  border:
+    1px solid
+    rgba(255, 255, 255, 0.48);
+
+  border-radius: 50%;
+  place-items: center;
+
+  background:
+    rgba(7, 7, 7, 0.78);
+
+  box-shadow:
+    0 8px 19px
+      rgba(0, 0, 0, 0.37);
+
+  color: #f7f3e9;
+
+  cursor: pointer;
+  backdrop-filter: blur(8px);
+
+  transition:
+    transform 320ms
+      var(--art-card-motion),
+    border-color 260ms ease,
+    background 260ms ease,
+    color 260ms ease,
+    box-shadow 260ms ease;
+}
+
+.artvault-card-wishlist svg {
+  transition:
+    transform 330ms
+      var(--art-card-motion);
+}
+
+.artvault-card-wishlist:hover:not(
+    :disabled
+  ) {
+  border-color:
+    var(--art-card-gold-bright);
+
+  background:
+    rgba(30, 24, 12, 0.94);
+
+  color:
+    var(--art-card-gold-bright);
+
+  box-shadow:
+    0 11px 25px
+      rgba(0, 0, 0, 0.42),
+    0 0 16px
+      rgba(201, 154, 53, 0.14);
+
+  transform:
+    translateY(-2px)
+    scale(1.07);
+}
+
+.artvault-card-wishlist:hover
+  svg {
+  transform: scale(1.08);
+}
+
+.artvault-card-wishlist.is-saved {
+  border-color:
+    var(--art-card-gold-bright);
+
+  background:
+    linear-gradient(
+      135deg,
+      #f2d372,
+      #c99a35
+    );
+
+  color: #090704;
+}
+
+.artvault-card-wishlist.is-saved
+  svg {
+  animation:
+    artvault-heart-pop
+    420ms
+    var(--art-card-motion);
+}
+
+@keyframes artvault-heart-pop {
+  0% {
+    transform: scale(0.72);
+  }
+
+  55% {
+    transform: scale(1.2);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+.artvault-card-wishlist:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+
+
+/* =========================================================
+   BODY
+========================================================= */
+
+.artvault-card-body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+
+  padding:
+    8px 24px 22px;
+}
+
+.artvault-card-category {
+  position: relative;
+
+  width: fit-content;
+
+  margin: 0 0 10px;
+
+  color:
+    var(--art-card-gold);
+
+  font-family:
+    "Inter",
+    "Segoe UI",
+    sans-serif;
+
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+
+  transition:
+    color 340ms ease,
+    transform 400ms
+      var(--art-card-motion);
+}
+
+.artvault-card-title {
+  display: -webkit-box;
+
+  min-height: 38px;
+  margin: 0;
+  overflow: hidden;
+
+  color:
+    var(--art-card-cream);
+
+  font-family:
+    "Cormorant Garamond",
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size:
+    clamp(
+      23px,
+      1.6vw,
+      29px
+    );
+
+  font-weight: 600;
+  line-height: 1.08;
+  letter-spacing: -0.026em;
+
+  -webkit-box-orient:
+    vertical;
+
+  -webkit-line-clamp: 2;
+
+  transition:
+    color 340ms ease,
+    transform 420ms
+      var(--art-card-motion),
+    text-shadow 340ms ease;
+}
+
+.artvault-card-artist {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+
+  margin: 10px 0 0;
+
+  overflow: hidden;
+
+  color:
+    var(--art-card-gold-light);
+
+  font-family:
+    "Inter",
+    "Segoe UI",
+    sans-serif;
+
+  font-size: 12px;
+  font-weight: 500;
+
+  text-overflow: ellipsis;
+  white-space: nowrap;
+
+  transition:
+    color 320ms ease,
+    transform 400ms
+      var(--art-card-motion);
+}
+
+.artvault-card-artist span {
+  color: #8e8981;
+
+  font-size: 11px;
+  font-weight: 400;
+
+  transition:
+    color 320ms ease;
+}
+
+.artvault-card-description {
+  display: -webkit-box;
+
+  min-height: 44px;
+  margin: 14px 0 0;
+
+  overflow: hidden;
+
+  color: #aaa49b;
+
+  font-family:
+    "Inter",
+    "Segoe UI",
+    sans-serif;
+
+  font-size: 12px;
+  line-height: 1.65;
+
+  opacity: 0;
+  max-height: 0;
+
+  transform:
+    translateY(8px);
+
+  -webkit-box-orient:
+    vertical;
+
+  -webkit-line-clamp: 2;
+
+  transition:
+    opacity 360ms ease,
+    max-height 440ms
+      var(--art-card-motion),
+    transform 440ms
+      var(--art-card-motion),
+    color 320ms ease;
+}
+
+.artvault-card:hover
+  .artvault-card-description,
+.artvault-card:focus-visible
+  .artvault-card-description {
+  max-height: 52px;
+
+  opacity: 1;
+
+  transform:
+    translateY(0);
+}
+
+/* =========================================================
+   HOVER TEXT GOLD
+========================================================= */
+
+.artvault-card:hover
+  .artvault-card-category,
+.artvault-card:hover
+  .artvault-card-title,
+.artvault-card:hover
+  .artvault-card-artist,
+.artvault-card:hover
+  .artvault-card-artist span,
+.artvault-card:focus-visible
+  .artvault-card-category,
+.artvault-card:focus-visible
+  .artvault-card-title,
+.artvault-card:focus-visible
+  .artvault-card-artist,
+.artvault-card:focus-visible
+  .artvault-card-artist span {
+  color:
+    var(--art-card-gold-bright);
+}
+
+.artvault-card:hover
+  .artvault-card-title,
+.artvault-card:focus-visible
+  .artvault-card-title {
+  text-shadow:
+    0 4px 16px
+      rgba(201, 154, 53, 0.12);
+
+  transform:
+    translateX(2px);
+}
+
+.artvault-card:hover
+  .artvault-card-category,
+.artvault-card:hover
+  .artvault-card-artist,
+.artvault-card:focus-visible
+  .artvault-card-category,
+.artvault-card:focus-visible
+  .artvault-card-artist {
+  transform:
+    translateX(2px);
+}
+
+/* =========================================================
+   DIVIDER
+========================================================= */
+
+.artvault-card-divider {
+  width: 100%;
+  height: 1px;
+
+  margin: 18px 0;
+
+  background:
+    linear-gradient(
+      90deg,
+      rgba(201, 154, 53, 0.22),
+      rgba(255, 255, 255, 0.07),
+      transparent
+    );
+
+  transition:
+    background 340ms ease;
+}
+
+.artvault-card:hover
+  .artvault-card-divider,
+.artvault-card:focus-visible
+  .artvault-card-divider {
+  background:
+    linear-gradient(
+      90deg,
+      rgba(243, 213, 120, 0.44),
+      rgba(243, 213, 120, 0.11),
+      transparent
+    );
+}
+
+/* =========================================================
+   PRICE AND RATING
+========================================================= */
+
+.artvault-card-bottom-row {
+  display: flex;
+  align-items: center;
+  justify-content:
+    space-between;
+  gap: 16px;
+}
+
+.artvault-card-price {
+  color:
+    var(--art-card-gold-bright);
+
+  font-family:
+    "Inter",
+    "Segoe UI",
+    sans-serif;
+
+  font-size: 23px;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+
+  transition:
+    color 320ms ease,
+    transform 400ms
+      var(--art-card-motion),
+    text-shadow 320ms ease;
+}
+
+.artvault-card:hover
+  .artvault-card-price,
+.artvault-card:focus-visible
+  .artvault-card-price {
+  color: #f7da82;
+
+  text-shadow:
+    0 4px 13px
+      rgba(201, 154, 53, 0.16);
+
+  transform:
+    translateX(2px);
+}
+
+.artvault-card-rating-row {
+  display: flex;
+  min-width: 0;
+
+  align-items: center;
+  justify-content: flex-end;
+  gap: 7px;
+}
+
+.artvault-card-star {
+  flex-shrink: 0;
+
+  color:
+    var(--art-card-gold);
+
+  transition:
+    color 320ms ease,
+    transform 400ms
+      var(--art-card-motion);
+}
+
+.artvault-card-rating {
+  color: #ece8df;
+
+  font-family:
+    "Inter",
+    "Segoe UI",
+    sans-serif;
+
+  font-size: 12px;
+  font-weight: 700;
+
+  transition:
+    color 320ms ease;
+}
+
+.artvault-card-reviews {
+  color: #89847c;
+
+  font-family:
+    "Inter",
+    "Segoe UI",
+    sans-serif;
+
+  font-size: 11px;
+
+  transition:
+    color 320ms ease;
+}
+
+.artvault-card:hover
+  .artvault-card-star,
+.artvault-card:hover
+  .artvault-card-rating,
+.artvault-card:hover
+  .artvault-card-reviews,
+.artvault-card:focus-visible
+  .artvault-card-star,
+.artvault-card:focus-visible
+  .artvault-card-rating,
+.artvault-card:focus-visible
+  .artvault-card-reviews {
+  color:
+    var(--art-card-gold-bright);
+}
+
+.artvault-card:hover
+  .artvault-card-star,
+.artvault-card:focus-visible
+  .artvault-card-star {
+  transform:
+    rotate(8deg)
+    scale(1.07);
+}
+
+/* =========================================================
+   DEFAULT FOOTER ACTIONS
+========================================================= */
+
+.artvault-card-footer-actions {
+  display: flex;
+  align-items: center;
+  justify-content:
+    space-between;
+  gap: 12px;
+
+  margin-top: 18px;
+  padding-top: 17px;
+
+  border-top:
+    1px solid
+    rgba(255, 255, 255, 0.07);
+}
+
+.artvault-card-footer-actions button {
+  display: flex;
+
+  align-items: center;
+  gap: 8px;
+
+  padding: 0;
+
+  border: 0;
+
+  background: transparent;
+
+  color: #aaa59c;
+
+  font: inherit;
+  font-size: 11px;
+
+  cursor: pointer;
+
+  transition:
+    color 240ms ease,
+    transform 300ms
+      var(--art-card-motion);
+}
+
+.artvault-card-footer-actions button:hover {
+  color:
+    var(--art-card-gold-bright);
+
+  transform:
+    translateY(-1px);
+}
+
+/* =========================================================
+   MESSAGE
+========================================================= */
+
+.artvault-card-message {
+  position: absolute;
+  right: 14px;
+  bottom: 14px;
+  z-index: 12;
+
+  padding: 8px 11px;
+
+  border:
+    1px solid
+    rgba(233, 201, 103, 0.28);
+
+  border-radius: 5px;
+
+  background:
+    rgba(8, 8, 8, 0.92);
+
+  color:
+    var(--art-card-gold-bright);
+
+  font-size: 10px;
+
+  box-shadow:
+    0 9px 21px
+      rgba(0, 0, 0, 0.42);
+
+  pointer-events: none;
+}
+
+/* =========================================================
+   EXPLORE PAGE: THREE CARDS
+========================================================= */
+
+.explore-page
+  .explore-results
+  .explore-art-grid {
+  display: grid !important;
+
+  grid-template-columns:
+    repeat(
+      3,
+      minmax(0, 1fr)
+    ) !important;
+
+  align-items:
+    stretch !important;
+
+  width: 100% !important;
+
+  gap: 24px !important;
+}
+
+.explore-page
+  .explore-results
+  .explore-art-grid
+  .artvault-card {
+  width: 100% !important;
+  min-width: 0 !important;
+  max-width: none !important;
+
+  height: 100% !important;
+  margin: 0 !important;
+}
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 1350px) {
+  .explore-page
+    .explore-results
+    .explore-art-grid {
+    grid-template-columns:
+      repeat(
+        2,
+        minmax(0, 1fr)
+      ) !important;
+  }
+}
+
+@media (max-width: 900px) {
+  .artvault-card-image-wrap {
+    aspect-ratio: 16 / 11;
+  }
+
+  .artvault-card-title {
+    font-size: 24px;
+  }
+}
+
+@media (max-width: 720px) {
+  .explore-page
+    .explore-results
+    .explore-art-grid {
+    grid-template-columns:
+      minmax(0, 1fr)
+      !important;
+  }
+
+  .artvault-card-actions {
+    right: 12px;
+    bottom: 12px;
+    left: 12px;
+  }
+
+  .artvault-card-actions button {
+    min-height: 70px;
+  }
+
+  .artvault-card-actions span {
+    font-size: 12px;
+  }
+
+  .artvault-card-body {
+    padding:
+      7px 18px 19px;
+  }
+}
+
+@media (max-width: 460px) {
+  .artvault-card-actions {
+    grid-template-columns:
+      repeat(
+        3,
+        minmax(0, 1fr)
+      );
+  }
+
+  .artvault-card-actions span {
+    display: none;
+  }
+
+  .artvault-card-actions button {
+    min-height: 55px;
+  }
+
+  .artvault-card-footer-actions {
+    align-items:
+      flex-start;
+
+    flex-direction: column;
+  }
+}
+
+/* =========================================================
+   TOUCH
+========================================================= */
+
+@media (hover: none) {
+  .artvault-card-actions {
+    opacity: 1;
+
+    transform: none;
+
+    pointer-events: auto;
+  }
+
+  .artvault-card-description {
+    max-height: 52px;
+
+    opacity: 1;
+
+    transform: none;
+  }
+}
+
+/* =========================================================
+   REDUCED MOTION
+========================================================= */
+
+@media (
+  prefers-reduced-motion: reduce
+) {
+  .artvault-card,
+  .artvault-card::before,
+  .artvault-card *,
+  .artvault-card *::before,
+  .artvault-card *::after {
+    animation-duration:
+      0.01ms !important;
+
+    animation-iteration-count:
+      1 !important;
+
+    transition-duration:
+      0.01ms !important;
+  }
+}
