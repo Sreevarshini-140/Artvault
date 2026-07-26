@@ -5,10 +5,21 @@ import {
 } from "react";
 
 import {
+  ArrowRight,
+  Check,
+  ChevronDown,
+  ImageOff,
+  PackageSearch,
+  RotateCcw,
+  Search,
+  ShoppingBag,
+  SlidersHorizontal,
+  Sparkles,
+} from "lucide-react";
+
+import {
   useNavigate,
 } from "react-router-dom";
-
-import PageHero from "../components/PageHero";
 
 import api from "../services/api";
 
@@ -20,6 +31,25 @@ import {
   getImageUrl,
 } from "../utils/imageUrl";
 
+import "../styles/Shop.css";
+
+const FORMAT_OPTIONS = [
+  "All formats",
+  "Canvas",
+  "Print",
+  "Frame",
+  "Poster",
+  "Digital",
+  "Graphite",
+  "Ink",
+];
+
+const PRICE_OPTIONS = [
+  "Any price",
+  "Under ₹5,000",
+  "₹5,000–₹20,000",
+  "₹20,000+",
+];
 
 export default function Shop() {
   const navigate = useNavigate();
@@ -32,6 +62,9 @@ export default function Shop() {
 
   const [price, setPrice] =
     useState("Any price");
+
+  const [searchTerm, setSearchTerm] =
+    useState("");
 
   const [applied, setApplied] =
     useState({
@@ -48,14 +81,10 @@ export default function Shop() {
   const [error, setError] =
     useState("");
 
-  // =============================
-  // LOAD REAL DATABASE ARTWORKS
-  // =============================
-
   useEffect(() => {
     let active = true;
 
-    const loadArtworks = async () => {
+    async function loadArtworks() {
       try {
         setLoading(true);
         setError("");
@@ -75,25 +104,12 @@ export default function Shop() {
               responseData?.data ||
               [];
 
-        if (!active) {
-          return;
-        }
-
-        /*
-          Only show published artworks
-          that have a valid price.
-
-          If your backend already returns
-          only published artworks, this
-          still works correctly.
-        */
         const sellableArtworks =
           receivedArtworks.filter(
             (artwork) => {
-              const status =
-                String(
-                  artwork?.status || ""
-                ).toLowerCase();
+              const status = String(
+                artwork?.status || ""
+              ).toLowerCase();
 
               const artworkPrice =
                 Number(
@@ -118,30 +134,30 @@ export default function Shop() {
             }
           );
 
-        setArtworks(
-          sellableArtworks
-        );
-      } catch (requestError) {
-        if (!active) {
-          return;
+        if (active) {
+          setArtworks(
+            sellableArtworks
+          );
         }
-
+      } catch (requestError) {
         console.error(
           "Failed to load shop artworks:",
           requestError
         );
 
-        setError(
-          requestError.response?.data
-            ?.error ||
-            "Unable to load artworks."
-        );
+        if (active) {
+          setError(
+            requestError.response?.data
+              ?.error ||
+              "Unable to load artworks."
+          );
+        }
       } finally {
         if (active) {
           setLoading(false);
         }
       }
-    };
+    }
 
     loadArtworks();
 
@@ -150,13 +166,23 @@ export default function Shop() {
     };
   }, []);
 
-  // =============================
-  // NORMALIZE ARTWORK DETAILS
-  // =============================
+  useEffect(() => {
+    if (!message) {
+      return undefined;
+    }
 
-  const getArtworkFormat = (
+    const timer = setTimeout(() => {
+      setMessage("");
+    }, 4500);
+
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [message]);
+
+  function getArtworkFormat(
     artwork
-  ) => {
+  ) {
     return String(
       artwork?.product_type ||
         artwork?.format ||
@@ -167,11 +193,11 @@ export default function Shop() {
     )
       .trim()
       .toLowerCase();
-  };
+  }
 
-  const getArtistName = (
+  function getArtistName(
     artwork
-  ) => {
+  ) {
     return (
       artwork?.artist_name ||
       artwork?.artist?.name ||
@@ -182,11 +208,11 @@ export default function Shop() {
       artwork?.creator_name ||
       "ArtVault Artist"
     );
-  };
+  }
 
-  const getArtworkImage = (
+  function getArtworkImage(
     artwork
-  ) => {
+  ) {
     return (
       artwork?.image_url ||
       artwork?.image ||
@@ -194,14 +220,26 @@ export default function Shop() {
       artwork?.cover_image ||
       ""
     );
-  };
+  }
 
-  // =============================
-  // FILTER PRODUCTS
-  // =============================
+  function getArtworkMedium(
+    artwork
+  ) {
+    return (
+      artwork?.medium ||
+      artwork?.category?.name ||
+      artwork?.category_name ||
+      artwork?.product_type ||
+      "Original artwork"
+    );
+  }
 
   const shownArtworks =
     useMemo(() => {
+      const query = searchTerm
+        .trim()
+        .toLowerCase();
+
       return artworks.filter(
         (artwork) => {
           const artworkFormat =
@@ -219,6 +257,26 @@ export default function Shop() {
               .toLowerCase()
               .trim();
 
+          const title = String(
+            artwork?.title || ""
+          ).toLowerCase();
+
+          const artistName =
+            getArtistName(
+              artwork
+            ).toLowerCase();
+
+          const medium =
+            getArtworkMedium(
+              artwork
+            ).toLowerCase();
+
+          const matchesSearch =
+            !query ||
+            title.includes(query) ||
+            artistName.includes(query) ||
+            medium.includes(query);
+
           const matchesFormat =
             applied.format ===
               "All formats" ||
@@ -229,24 +287,19 @@ export default function Shop() {
           const matchesPrice =
             applied.price ===
               "Any price" ||
-            (
-              applied.price ===
-                "Under ₹5,000" &&
-              artworkPrice < 5000
-            ) ||
-            (
-              applied.price ===
-                "₹5,000–₹20,000" &&
+            (applied.price ===
+              "Under ₹5,000" &&
+              artworkPrice < 5000) ||
+            (applied.price ===
+              "₹5,000–₹20,000" &&
               artworkPrice >= 5000 &&
-              artworkPrice <= 20000
-            ) ||
-            (
-              applied.price ===
-                "₹20,000+" &&
-              artworkPrice > 20000
-            );
+              artworkPrice <= 20000) ||
+            (applied.price ===
+              "₹20,000+" &&
+              artworkPrice > 20000);
 
           return (
+            matchesSearch &&
             matchesFormat &&
             matchesPrice
           );
@@ -255,15 +308,51 @@ export default function Shop() {
     }, [
       artworks,
       applied,
+      searchTerm,
     ]);
 
-  // =============================
-  // ADD REAL ARTWORK TO CART
-  // =============================
+  const highestPrice =
+    useMemo(() => {
+      if (artworks.length === 0) {
+        return 0;
+      }
 
-  const handleAddToCart = (
+      return Math.max(
+        ...artworks.map((artwork) =>
+          Number(
+            artwork?.price || 0
+          )
+        )
+      );
+    }, [artworks]);
+
+  const filtersActive =
+    applied.format !==
+      "All formats" ||
+    applied.price !==
+      "Any price" ||
+    searchTerm.trim() !== "";
+
+  function applyFilters() {
+    setApplied({
+      format,
+      price,
+    });
+  }
+
+  function resetFilters() {
+    setFormat("All formats");
+    setPrice("Any price");
+    setApplied({
+      format: "All formats",
+      price: "Any price",
+    });
+    setSearchTerm("");
+  }
+
+  function handleAddToCart(
     artwork
-  ) => {
+  ) {
     const artworkId =
       artwork?.id ||
       artwork?.artwork_id;
@@ -280,7 +369,6 @@ export default function Shop() {
 
     addToCart({
       id: artworkId,
-
       artwork_id: artworkId,
 
       title:
@@ -312,313 +400,666 @@ export default function Shop() {
       `${
         artwork?.title ||
         "Artwork"
-      } added to cart.`
-    );
-  };
-
-  // =============================
-  // PAGE STATES
-  // =============================
-
-  if (loading) {
-    return (
-      <>
-        <PageHero
-          eyebrow="Art marketplace"
-          title="Bring the gallery home"
-          text="Discover original artworks created by independent artists."
-        />
-
-        <section className="container">
-          <p className="status-message">
-            Loading artworks...
-          </p>
-        </section>
-      </>
+      } added to your cart.`
     );
   }
 
   return (
-    <>
-      <PageHero
-        eyebrow="Art marketplace"
-        title="Bring the gallery home"
-        text="Discover original artworks created by independent artists."
-      />
+    <main className="shop-page">
+      <section className="shop-hero">
+        <div className="shop-hero-glow shop-hero-glow-one" />
+        <div className="shop-hero-glow shop-hero-glow-two" />
 
-      <section className="container shop-layout">
-        <aside className="filter-panel">
-          <h3>
-            Shop by
-          </h3>
+        <div className="shop-hero-inner">
+          <div className="shop-hero-content">
+            <div className="shop-eyebrow">
+              <Sparkles
+                size={15}
+                strokeWidth={1.8}
+              />
 
-          <label>
-            Format
-
-            <select
-              value={format}
-              onChange={(event) =>
-                setFormat(
-                  event.target.value
-                )
-              }
-            >
-              <option>
-                All formats
-              </option>
-
-              <option>
-                Canvas
-              </option>
-
-              <option>
-                Print
-              </option>
-
-              <option>
-                Frame
-              </option>
-
-              <option>
-                Poster
-              </option>
-
-              <option>
-                Digital
-              </option>
-
-              <option>
-                Graphite
-              </option>
-
-              <option>
-                Ink
-              </option>
-            </select>
-          </label>
-
-          <label>
-            Price
-
-            <select
-              value={price}
-              onChange={(event) =>
-                setPrice(
-                  event.target.value
-                )
-              }
-            >
-              <option>
-                Any price
-              </option>
-
-              <option>
-                Under ₹5,000
-              </option>
-
-              <option>
-                ₹5,000–₹20,000
-              </option>
-
-              <option>
-                ₹20,000+
-              </option>
-            </select>
-          </label>
-
-          <button
-            className="btn"
-            type="button"
-            onClick={() =>
-              setApplied({
-                format,
-                price,
-              })
-            }
-          >
-            Apply filters
-          </button>
-
-          {message && (
-            <div className="shop-cart-message">
-              <p className="success-message">
-                {message}
-              </p>
-
-              <button
-                className="text-btn"
-                type="button"
-                onClick={() =>
-                  navigate(
-                    "/cart"
-                  )
-                }
-              >
-                View cart
-              </button>
+              <span>
+                Art marketplace
+              </span>
             </div>
-          )}
-        </aside>
 
-        <div className="shop-results">
-          {error && (
-            <p className="error-message">
-              {error}
+            <h1>
+              Bring the gallery
+              <span> home.</span>
+            </h1>
+
+            <p>
+              Discover original works
+              created by independent
+              artists and collect art
+              that makes your space
+              distinctly yours.
             </p>
-          )}
 
-          {!error &&
-            shownArtworks.length ===
-              0 && (
-              <div className="empty-state">
-                <h3>
-                  No artworks found
-                </h3>
+            <div className="shop-hero-stats">
+              <div>
+                <strong>
+                  {loading
+                    ? "—"
+                    : artworks.length.toLocaleString(
+                        "en-IN"
+                      )}
+                </strong>
 
-                <p>
-                  No published artworks
-                  match the selected
-                  filters.
-                </p>
+                <span>
+                  Available works
+                </span>
               </div>
-            )}
 
-          <div className="product-grid">
-            {shownArtworks.map(
-              (artwork) => {
-                const artworkId =
-                  artwork?.id ||
-                  artwork?.artwork_id;
+              <div className="shop-stat-divider" />
 
-                const rawImage =
-                  getArtworkImage(
-                    artwork
-                  );
+              <div>
+                <strong>
+                  {loading
+                    ? "—"
+                    : shownArtworks.length.toLocaleString(
+                        "en-IN"
+                      )}
+                </strong>
 
-                const finalImage =
-                  rawImage
-                    ? getImageUrl(
-                        rawImage
-                      )
-                    : "";
+                <span>
+                  Curated results
+                </span>
+              </div>
 
-                const artistName =
-                  getArtistName(
-                    artwork
-                  );
+              <div className="shop-stat-divider" />
 
-                const artworkPrice =
-                  Number(
-                    artwork?.price ||
-                    0
-                  );
+              <div>
+                <strong>
+                  {loading ||
+                  highestPrice === 0
+                    ? "—"
+                    : `₹${highestPrice.toLocaleString(
+                        "en-IN"
+                      )}`}
+                </strong>
 
-                return (
-                  <article
-                    className="product-card"
-                    key={artworkId}
-                  >
-                    <button
-                      className="product-image-button"
-                      type="button"
-                      onClick={() =>
-                        navigate(
-                          `/artworks/${artworkId}`
-                        )
-                      }
-                      aria-label={`View ${
-                        artwork?.title ||
-                        "artwork"
-                      }`}
-                    >
-                      {finalImage ? (
-                        <img
-                          className="product-image"
-                          src={finalImage}
-                          alt={
-                            artwork?.title ||
-                            "Artwork"
-                          }
-                          onError={(
-                            event
-                          ) => {
-                            event.currentTarget.style.display =
-                              "none";
+                <span>
+                  Highest value
+                </span>
+              </div>
+            </div>
+          </div>
 
-                            const fallback =
-                              event
-                                .currentTarget
-                                .nextElementSibling;
+          <div className="shop-hero-seal">
+            <div className="shop-seal-ring">
+              <ShoppingBag
+                size={38}
+                strokeWidth={1.3}
+              />
 
-                            if (
-                              fallback
-                            ) {
-                              fallback.style.display =
-                                "flex";
-                            }
-                          }}
-                        />
-                      ) : null}
+              <strong>
+                AV
+              </strong>
 
-                      <div
-                        className="product-image-fallback"
-                        style={{
-                          display:
-                            finalImage
-                              ? "none"
-                              : "flex",
-                        }}
-                      >
-                        Image unavailable
-                      </div>
-                    </button>
-
-                    <span className="eyebrow">
-                      Original artwork
-                    </span>
-
-                    <h3>
-                      {artwork?.title ||
-                        "Untitled Artwork"}
-                    </h3>
-
-                    <p className="product-artist">
-                      by {artistName}
-                    </p>
-
-                    <p>
-                      {artwork?.medium ||
-                        artwork?.category_name ||
-                        "Original artwork"}
-                    </p>
-
-                    <div className="product-bottom">
-                      <strong>
-                        ₹
-                        {artworkPrice.toLocaleString(
-                          "en-IN"
-                        )}
-                      </strong>
-
-                      <button
-                        className="btn small"
-                        type="button"
-                        onClick={() =>
-                          handleAddToCart(
-                            artwork
-                          )
-                        }
-                      >
-                        Add to cart
-                      </button>
-                    </div>
-                  </article>
-                );
-              }
-            )}
+              <span>
+                Original works
+              </span>
+            </div>
           </div>
         </div>
       </section>
-    </>
+
+      <section className="shop-directory">
+        <div className="shop-directory-inner">
+          <div className="shop-heading-row">
+            <div className="shop-heading">
+              <span>
+                01
+              </span>
+
+              <div>
+                <p>
+                  The collection
+                </p>
+
+                <h2>
+                  Shop original art
+                </h2>
+              </div>
+            </div>
+
+            <label className="shop-search">
+              <Search
+                size={19}
+                strokeWidth={1.8}
+              />
+
+              <input
+                type="search"
+                value={searchTerm}
+                onChange={(event) =>
+                  setSearchTerm(
+                    event.target.value
+                  )
+                }
+                placeholder="Search artwork, artist or medium"
+                aria-label="Search shop artworks"
+              />
+
+              {searchTerm && (
+                <button
+                  type="button"
+                  onClick={() =>
+                    setSearchTerm("")
+                  }
+                >
+                  Clear
+                </button>
+              )}
+            </label>
+          </div>
+
+          <div className="shop-content">
+            <aside className="shop-filter-panel">
+              <div className="shop-filter-header">
+                <div>
+                  <SlidersHorizontal
+                    size={18}
+                    strokeWidth={1.8}
+                  />
+
+                  <span>
+                    Refine collection
+                  </span>
+                </div>
+
+                {filtersActive && (
+                  <button
+                    type="button"
+                    className="shop-reset-button"
+                    onClick={
+                      resetFilters
+                    }
+                  >
+                    <RotateCcw
+                      size={14}
+                    />
+
+                    Reset
+                  </button>
+                )}
+              </div>
+
+              <div className="shop-filter-group">
+                <label
+                  htmlFor="shop-format"
+                >
+                  Format
+                </label>
+
+                <div className="shop-select-wrap">
+                  <select
+                    id="shop-format"
+                    value={format}
+                    onChange={(event) =>
+                      setFormat(
+                        event.target
+                          .value
+                      )
+                    }
+                  >
+                    {FORMAT_OPTIONS.map(
+                      (option) => (
+                        <option
+                          key={option}
+                          value={option}
+                        >
+                          {option}
+                        </option>
+                      )
+                    )}
+                  </select>
+
+                  <ChevronDown
+                    size={17}
+                    aria-hidden="true"
+                  />
+                </div>
+              </div>
+
+              <div className="shop-filter-group">
+                <label
+                  htmlFor="shop-price"
+                >
+                  Price
+                </label>
+
+                <div className="shop-select-wrap">
+                  <select
+                    id="shop-price"
+                    value={price}
+                    onChange={(event) =>
+                      setPrice(
+                        event.target
+                          .value
+                      )
+                    }
+                  >
+                    {PRICE_OPTIONS.map(
+                      (option) => (
+                        <option
+                          key={option}
+                          value={option}
+                        >
+                          {option}
+                        </option>
+                      )
+                    )}
+                  </select>
+
+                  <ChevronDown
+                    size={17}
+                    aria-hidden="true"
+                  />
+                </div>
+              </div>
+
+              <button
+                className="shop-apply-button"
+                type="button"
+                onClick={applyFilters}
+              >
+                <span>
+                  Apply filters
+                </span>
+
+                <ArrowRight
+                  size={17}
+                />
+              </button>
+
+              <div className="shop-filter-note">
+                <Sparkles
+                  size={16}
+                />
+
+                <p>
+                  Every listed piece is
+                  an original work
+                  published by an
+                  ArtVault artist.
+                </p>
+              </div>
+            </aside>
+
+            <div className="shop-results">
+              <div className="shop-results-header">
+                <p>
+                  Showing{" "}
+                  <strong>
+                    {shownArtworks.length}
+                  </strong>{" "}
+                  of{" "}
+                  <strong>
+                    {artworks.length}
+                  </strong>{" "}
+                  artworks
+                </p>
+
+                <span>
+                  Curated by ArtVault
+                </span>
+              </div>
+
+              {message && (
+                <div className="shop-cart-notice">
+                  <div>
+                    <span className="shop-cart-notice-icon">
+                      <Check
+                        size={16}
+                        strokeWidth={2.2}
+                      />
+                    </span>
+
+                    <p>{message}</p>
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={() =>
+                      navigate("/cart")
+                    }
+                  >
+                    View cart
+                    <ArrowRight
+                      size={16}
+                    />
+                  </button>
+                </div>
+              )}
+
+              {loading && (
+                <div className="shop-product-grid">
+                  {Array.from({
+                    length: 6,
+                  }).map(
+                    (_, index) => (
+                      <article
+                        className="shop-product-card shop-product-skeleton-card"
+                        key={index}
+                      >
+                        <div className="shop-skeleton shop-skeleton-image" />
+
+                        <div className="shop-skeleton shop-skeleton-label" />
+
+                        <div className="shop-skeleton shop-skeleton-title" />
+
+                        <div className="shop-skeleton shop-skeleton-text" />
+
+                        <div className="shop-skeleton shop-skeleton-footer" />
+                      </article>
+                    )
+                  )}
+                </div>
+              )}
+
+              {!loading && error && (
+                <div className="shop-state">
+                  <div className="shop-state-icon">
+                    <PackageSearch
+                      size={29}
+                      strokeWidth={1.5}
+                    />
+                  </div>
+
+                  <p className="shop-state-label">
+                    Collection unavailable
+                  </p>
+
+                  <h2>
+                    The shop could not be
+                    loaded.
+                  </h2>
+
+                  <p>
+                    {error}
+                  </p>
+
+                  <button
+                    type="button"
+                    onClick={() =>
+                      window.location.reload()
+                    }
+                  >
+                    Try again
+                  </button>
+                </div>
+              )}
+
+              {!loading &&
+                !error &&
+                shownArtworks.length ===
+                  0 && (
+                  <div className="shop-state">
+                    <div className="shop-state-icon">
+                      <Search
+                        size={28}
+                        strokeWidth={1.5}
+                      />
+                    </div>
+
+                    <p className="shop-state-label">
+                      No matching works
+                    </p>
+
+                    <h2>
+                      No artworks match
+                      your filters.
+                    </h2>
+
+                    <p>
+                      Adjust the format,
+                      price range, or
+                      search phrase to
+                      explore more of the
+                      collection.
+                    </p>
+
+                    <button
+                      type="button"
+                      onClick={
+                        resetFilters
+                      }
+                    >
+                      Reset filters
+                    </button>
+                  </div>
+                )}
+
+              {!loading &&
+                !error &&
+                shownArtworks.length >
+                  0 && (
+                  <div className="shop-product-grid">
+                    {shownArtworks.map(
+                      (
+                        artwork,
+                        index
+                      ) => {
+                        const artworkId =
+                          artwork?.id ||
+                          artwork?.artwork_id;
+
+                        const rawImage =
+                          getArtworkImage(
+                            artwork
+                          );
+
+                        const finalImage =
+                          rawImage
+                            ? getImageUrl(
+                                rawImage
+                              )
+                            : "";
+
+                        const artistName =
+                          getArtistName(
+                            artwork
+                          );
+
+                        const artworkPrice =
+                          Number(
+                            artwork?.price ||
+                              0
+                          );
+
+                        const artworkMedium =
+                          getArtworkMedium(
+                            artwork
+                          );
+
+                        return (
+                          <article
+                            className="shop-product-card"
+                            key={
+                              artworkId
+                            }
+                            style={{
+                              "--shop-card-index":
+                                index,
+                            }}
+                          >
+                            <button
+                              className="shop-product-image-button"
+                              type="button"
+                              onClick={() =>
+                                navigate(
+                                  `/artworks/${artworkId}`
+                                )
+                              }
+                              aria-label={`View ${
+                                artwork?.title ||
+                                "artwork"
+                              }`}
+                            >
+                              {finalImage ? (
+                                <img
+                                  className="shop-product-image"
+                                  src={
+                                    finalImage
+                                  }
+                                  alt={
+                                    artwork?.title ||
+                                    "Artwork"
+                                  }
+                                  loading="lazy"
+                                  onError={(
+                                    event
+                                  ) => {
+                                    event.currentTarget.style.display =
+                                      "none";
+
+                                    const fallback =
+                                      event
+                                        .currentTarget
+                                        .nextElementSibling;
+
+                                    if (
+                                      fallback
+                                    ) {
+                                      fallback.style.display =
+                                        "flex";
+                                    }
+                                  }}
+                                />
+                              ) : null}
+
+                              <div
+                                className="shop-product-image-fallback"
+                                style={{
+                                  display:
+                                    finalImage
+                                      ? "none"
+                                      : "flex",
+                                }}
+                              >
+                                <ImageOff
+                                  size={27}
+                                  strokeWidth={
+                                    1.5
+                                  }
+                                />
+
+                                <span>
+                                  Image
+                                  unavailable
+                                </span>
+                              </div>
+
+                              <div className="shop-product-image-overlay">
+                                <span>
+                                  View artwork
+                                </span>
+
+                                <ArrowRight
+                                  size={18}
+                                />
+                              </div>
+
+                              <span className="shop-product-number">
+                                {String(
+                                  index + 1
+                                ).padStart(
+                                  2,
+                                  "0"
+                                )}
+                              </span>
+                            </button>
+
+                            <div className="shop-product-info">
+                              <div className="shop-product-meta">
+                                <span>
+                                  Original
+                                  artwork
+                                </span>
+
+                                <span>
+                                  {
+                                    artworkMedium
+                                  }
+                                </span>
+                              </div>
+
+                              <button
+                                type="button"
+                                className="shop-product-title-button"
+                                onClick={() =>
+                                  navigate(
+                                    `/artworks/${artworkId}`
+                                  )
+                                }
+                              >
+                                <h3>
+                                  {artwork?.title ||
+                                    "Untitled Artwork"}
+                                </h3>
+                              </button>
+
+                              <p className="shop-product-artist">
+                                By{" "}
+                                <strong>
+                                  {
+                                    artistName
+                                  }
+                                </strong>
+                              </p>
+
+                              <div className="shop-product-bottom">
+                                <div className="shop-product-price">
+                                  <span>
+                                    Price
+                                  </span>
+
+                                  <strong>
+                                    ₹
+                                    {artworkPrice.toLocaleString(
+                                      "en-IN"
+                                    )}
+                                  </strong>
+                                </div>
+
+                                <button
+                                  className="shop-cart-button"
+                                  type="button"
+                                  onClick={() =>
+                                    handleAddToCart(
+                                      artwork
+                                    )
+                                  }
+                                  aria-label={`Add ${
+                                    artwork?.title ||
+                                    "artwork"
+                                  } to cart`}
+                                >
+                                  <ShoppingBag
+                                    size={18}
+                                    strokeWidth={
+                                      1.8
+                                    }
+                                  />
+
+                                  <span>
+                                    Add to cart
+                                  </span>
+                                </button>
+                              </div>
+                            </div>
+                          </article>
+                        );
+                      }
+                    )}
+                  </div>
+                )}
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
   );
 }
