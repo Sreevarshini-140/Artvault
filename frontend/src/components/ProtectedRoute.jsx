@@ -3,17 +3,14 @@ import {
   useLocation,
 } from "react-router-dom";
 
-import {
-  useAuth,
-} from "../context/AuthContext";
+import { useAuth } from "../context/AuthContext";
 
 
 export default function ProtectedRoute({
   children,
   roles = [],
 }) {
-  const location =
-    useLocation();
+  const location = useLocation();
 
   const {
     user,
@@ -23,38 +20,26 @@ export default function ProtectedRoute({
     isCurator,
   } = useAuth();
 
-  // =============================
-  // SESSION LOADING
-  // =============================
-
   if (loading) {
     return (
       <section
         style={{
-          minHeight:
-            "calc(100vh - 72px)",
+          minHeight: "calc(100vh - 72px)",
           display: "grid",
           placeItems: "center",
           padding: "2rem",
         }}
       >
-        <div
-          style={{
-            textAlign: "center",
-          }}
-        >
+        <div style={{ textAlign: "center" }}>
           <div
             style={{
               width: "38px",
               height: "38px",
-              margin:
-                "0 auto 1rem",
+              margin: "0 auto 1rem",
               border:
                 "3px solid rgba(201, 169, 110, 0.25)",
-              borderTopColor:
-                "#c9a96e",
-              borderRadius:
-                "50%",
+              borderTopColor: "#c9a96e",
+              borderRadius: "50%",
               animation:
                 "protected-route-spin 0.8s linear infinite",
             }}
@@ -84,10 +69,6 @@ export default function ProtectedRoute({
     );
   }
 
-  // =============================
-  // USER NOT LOGGED IN
-  // =============================
-
   if (!user) {
     return (
       <Navigate
@@ -102,67 +83,42 @@ export default function ProtectedRoute({
     );
   }
 
-  // =============================
-  // ROLE NORMALIZATION
-  // =============================
+  const normalizedRoles = Array.isArray(roles)
+    ? roles
+        .map((role) =>
+          String(role || "")
+            .trim()
+            .toLowerCase()
+        )
+        .filter(Boolean)
+    : [];
 
-  const normalizedRoles =
-    Array.isArray(roles)
-      ? roles
-          .map((role) =>
-            String(role || "")
-              .trim()
-              .toLowerCase()
-          )
-          .filter(Boolean)
-      : [];
-
-  /*
-    When no roles are supplied,
-    the route only requires login.
-  */
-  if (
-    normalizedRoles.length === 0
-  ) {
+  if (normalizedRoles.length === 0) {
     return children;
   }
 
-  // =============================
-  // ACCESS CHECK
-  // =============================
-
-  const userRole =
-    String(
-      user?.role || ""
-    )
-      .trim()
-      .toLowerCase();
+  const userRole = String(
+    user?.role || ""
+  )
+    .trim()
+    .toLowerCase();
 
   const hasRequiredRole =
     normalizedRoles.some(
       (requiredRole) => {
-        if (
-          requiredRole === "admin"
-        ) {
+        if (requiredRole === "admin") {
           return Boolean(isAdmin);
         }
 
-        if (
-          requiredRole === "artist"
-        ) {
+        if (requiredRole === "artist") {
           return Boolean(isArtist);
         }
 
-        if (
-          requiredRole === "curator"
-        ) {
+        if (requiredRole === "curator") {
           return Boolean(isCurator);
         }
 
-        return (
-          userRole ===
-          requiredRole
-        );
+        return userRole === requiredRole;
       }
     );
 
@@ -171,6 +127,11 @@ export default function ProtectedRoute({
       <Navigate
         to="/dashboard"
         replace
+        state={{
+          accessDenied: true,
+          attemptedPath:
+            location.pathname,
+        }}
       />
     );
   }

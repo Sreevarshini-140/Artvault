@@ -16,6 +16,8 @@ import {
   Gavel,
   Grid2X2,
   Heart,
+  Images,
+  Upload,
   LogOut,
   Mail,
   Package,
@@ -244,10 +246,6 @@ export default function Dashboard() {
     user?.role || "visitor"
   ).toLowerCase();
 
-  if (isAdmin) {
-    return <AdminDashboard />;
-  }
-
   useEffect(() => {
     let mounted = true;
 
@@ -436,6 +434,22 @@ export default function Dashboard() {
       icon: <Grid2X2 size={20} />,
       to: "/dashboard",
     },
+
+    ...(role === "artist"
+      ? [
+          {
+            label: "Upload Artwork",
+            icon: <Upload size={20} />,
+            to: "/artist/upload",
+          },
+          {
+            label: "My Artworks",
+            icon: <Images size={20} />,
+            to: "/artist/artworks",
+          },
+        ]
+      : []),
+
     {
       label: "Explore",
       icon: <Search size={20} />,
@@ -530,6 +544,10 @@ export default function Dashboard() {
       navigate("/login");
     }
   };
+
+  if (isAdmin) {
+    return <AdminDashboard />;
+  }
 
   if (loading) {
     return (
