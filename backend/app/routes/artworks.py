@@ -1,6 +1,8 @@
 import os
 import uuid
 
+import cloudinary.uploader
+
 from flask import (
     Blueprint,
     current_app,
@@ -56,10 +58,121 @@ def allowed_file(filename):
     )
 
 
+def upload_artwork_image(image):
+    """
+    Upload artwork image to Cloudinary.
+    """
+
+    if not os.getenv("CLOUDINARY_URL"):
+        raise RuntimeError(
+            "CLOUDINARY_URL is not configured."
+        )
+
+    result = cloudinary.uploader.upload(
+        image,
+        folder="artvault/artworks",
+        resource_type="image",
+        unique_filename=True,
+        overwrite=False,
+    )
+
+    secure_url = result.get(
+        "secure_url"
+    )
+
+    if not secure_url:
+        raise RuntimeError(
+            "Cloudinary did not return "
+            "a secure URL."
+        )
+
+    return secure_url
+
+
+def get_cloudinary_public_id(
+    image_url,
+):
+    if (
+        not image_url
+        or "res.cloudinary.com" not in image_url
+        or "/upload/" not in image_url
+    ):
+        return None
+
+    value = (
+        image_url
+        .split("/upload/", 1)[1]
+        .split("?", 1)[0]
+    )
+
+    parts = [
+        part
+        for part in value.split("/")
+        if part
+    ]
+
+    if (
+        parts
+        and parts[0].startswith("v")
+        and parts[0][1:].isdigit()
+    ):
+        parts = parts[1:]
+
+    if not parts:
+        return None
+
+    public_id = "/".join(
+        parts
+    )
+
+    if "." in public_id:
+        public_id = public_id.rsplit(
+            ".",
+            1,
+        )[0]
+
+    return public_id
+
+
 def delete_uploaded_image(
     image_url,
 ):
+    """
+    Delete Cloudinary images or legacy
+    locally stored artwork images.
+
+    External URLs such as Unsplash are
+    intentionally left untouched.
+    """
+
     if not image_url:
+        return
+
+    if "res.cloudinary.com" in image_url:
+        public_id = (
+            get_cloudinary_public_id(
+                image_url
+            )
+        )
+
+        if not public_id:
+            return
+
+        try:
+            cloudinary.uploader.destroy(
+                public_id,
+                resource_type="image",
+                invalidate=True,
+            )
+
+        except Exception as error:
+            current_app.logger.warning(
+                "Cloudinary delete failed "
+                "for %s: %s",
+                public_id,
+                error,
+            )
+
         return
 
     if not image_url.startswith(
@@ -85,6 +198,7 @@ def delete_uploaded_image(
         os.remove(
             file_path
         )
+
 
 
 def serialize_artwork(
@@ -783,48 +897,26 @@ def create_artwork():
                 "error": "Invalid year"
             }), 400
 
-    original_filename = (
-        secure_filename(
-            image.filename
+    try:
+        image_url = (
+            upload_artwork_image(
+                image
+            )
         )
-    )
 
-    extension = (
-        original_filename
-        .rsplit(".", 1)[1]
-        .lower()
-    )
+    except Exception as error:
+        current_app.logger.exception(
+            "Cloudinary artwork upload "
+            "failed: %s",
+            error,
+        )
 
-    unique_filename = (
-        f"{uuid.uuid4().hex}."
-        f"{extension}"
-    )
-
-    upload_folder = os.path.join(
-        current_app.root_path,
-        "static",
-        "uploads",
-        "artworks",
-    )
-
-    os.makedirs(
-        upload_folder,
-        exist_ok=True,
-    )
-
-    image_path = os.path.join(
-        upload_folder,
-        unique_filename,
-    )
-
-    image.save(
-        image_path
-    )
-
-    image_url = (
-        "/static/uploads/artworks/"
-        f"{unique_filename}"
-    )
+        return jsonify({
+            "error": (
+                "Unable to upload "
+                "artwork image."
+            )
+        }), 500
 
     artwork = Artwork(
         title=title,
@@ -1050,7 +1142,6 @@ def update_artwork(
         "image"
     )
 
-    new_image_path = None
     old_image_url = (
         artwork.image_url
     )
@@ -1070,55 +1161,36 @@ def update_artwork(
                 )
             }), 400
 
-        original_filename = (
-            secure_filename(
-                image.filename
+        try:
+            artwork.image_url = (
+                upload_artwork_image(
+                    image
+                )
             )
-        )
 
-        extension = (
-            original_filename
-            .rsplit(".", 1)[1]
-            .lower()
-        )
+        except Exception as error:
+            current_app.logger.exception(
+                "Cloudinary artwork "
+                "replacement failed: %s",
+                error,
+            )
 
-        unique_filename = (
-            f"{uuid.uuid4().hex}."
-            f"{extension}"
-        )
-
-        upload_folder = os.path.join(
-            current_app.root_path,
-            "static",
-            "uploads",
-            "artworks",
-        )
-
-        os.makedirs(
-            upload_folder,
-            exist_ok=True,
-        )
-
-        new_image_path = os.path.join(
-            upload_folder,
-            unique_filename,
-        )
-
-        image.save(
-            new_image_path
-        )
-
-        artwork.image_url = (
-            "/static/uploads/artworks/"
-            f"{unique_filename}"
-        )
+            return jsonify({
+                "error": (
+                    "Unable to upload "
+                    "replacement artwork image."
+                )
+            }), 500
 
     try:
         db.session.commit()
 
         if (
-            new_image_path
+            image
+            and image.filename
             and old_image_url
+            and old_image_url
+            != artwork.image_url
         ):
             delete_uploaded_image(
                 old_image_url
@@ -1132,16 +1204,6 @@ def update_artwork(
 
     except Exception as error:
         db.session.rollback()
-
-        if (
-            new_image_path
-            and os.path.exists(
-                new_image_path
-            )
-        ):
-            os.remove(
-                new_image_path
-            )
 
         current_app.logger.exception(
             error
