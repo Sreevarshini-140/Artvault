@@ -37,10 +37,10 @@ export default function Dashboard() {
         isArtist: {String(isArtist)}
       </div>
 
-      {isAdmin ? (
-        <AdminDashboard />
-      ) : isArtist || role === "artist" ? (
+      {isArtist || role === "artist" ? (
         <ArtistDashboard />
+      ) : isAdmin ? (
+        <AdminDashboard />
       ) : (
         <VisitorDashboard />
       )}
