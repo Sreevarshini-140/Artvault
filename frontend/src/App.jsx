@@ -14,6 +14,7 @@ import ArtworkDetail from "./pages/ArtworkDetail";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
+import AdminDashboard from "./pages/AdminDashboard";
 import Wishlist from "./pages/Wishlist";
 import Following from "./pages/Following";
 import Artists from "./pages/Artists";
@@ -272,6 +273,15 @@ export default function App() {
           />
 
           {/* ADMIN ROUTES */}
+
+          <Route
+            path="/admin/dashboard"
+            element={
+              <Guard roles={["admin"]}>
+                <AdminDashboard />
+              </Guard>
+            }
+          />
 
           <Route
             path="/admin/artworks"

@@ -1,4 +1,4 @@
-import { useAuth } from "../context/AuthContext";
+﻿import { useAuth } from "../context/AuthContext";
 
 import AdminDashboard from "./AdminDashboard";
 import ArtistDashboard from "./ArtistDashboard";
@@ -19,24 +19,6 @@ export default function Dashboard() {
 
   return (
     <div>
-      <div
-        style={{
-          position: "fixed",
-          top: "10px",
-          left: "50%",
-          zIndex: 99999,
-          padding: "10px 18px",
-          color: "black",
-          background: "gold",
-          borderRadius: "8px",
-          transform: "translateX(-50%)",
-          fontWeight: "700",
-        }}
-      >
-        ACTIVE BUILD — role: {role} —
-        isArtist: {String(isArtist)}
-      </div>
-
       {isArtist || role === "artist" ? (
         <ArtistDashboard />
       ) : isAdmin ? (

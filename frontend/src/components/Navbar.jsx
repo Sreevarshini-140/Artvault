@@ -202,7 +202,7 @@ export default function Navbar() {
         {isAdmin && (
           <NavLink
             className={navLinkClass}
-            to="/admin/users"
+            to="/admin/dashboard"
           >
             Admin
           </NavLink>
@@ -493,7 +493,7 @@ export default function Navbar() {
                   className={
                     navLinkClass
                   }
-                  to="/admin/users"
+                  to="/admin/dashboard"
                   onClick={
                     closeMenu
                   }
