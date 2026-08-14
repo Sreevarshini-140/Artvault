@@ -371,7 +371,7 @@ export default function AdminDashboard() {
     {
       label: "Overview",
       icon: <LayoutDashboard size={19} />,
-      to: "/dashboard",
+      to: "/admin/dashboard",
     },
     {
       label: "Users",
