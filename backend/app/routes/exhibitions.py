@@ -339,7 +339,20 @@ def get_current_role():
         user_id,
     )
 
-    return user.role if user else None
+    if not user:
+        return None
+
+    if (
+        user.role == "admin"
+        or getattr(
+            user,
+            "is_admin",
+            False,
+        )
+    ):
+        return "admin"
+
+    return user.role
 
 
 @exhibitions_bp.get("")

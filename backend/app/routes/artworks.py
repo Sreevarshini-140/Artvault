@@ -48,6 +48,20 @@ VALID_ARTWORK_STATUSES = {
 }
 
 
+def user_has_admin_access(user):
+    return bool(
+        user
+        and (
+            user.role == "admin"
+            or getattr(
+                user,
+                "is_admin",
+                False,
+            )
+        )
+    )
+
+
 def allowed_file(filename):
     return (
         "." in filename
@@ -998,7 +1012,9 @@ def update_artwork(
     if (
         artwork.artist_id
         != user.id
-        and user.role != "admin"
+        and not user_has_admin_access(
+            user
+        )
     ):
         return jsonify({
             "error": "Not allowed"
@@ -1006,7 +1022,9 @@ def update_artwork(
 
     if (
         artwork.status == "sold"
-        and user.role != "admin"
+        and not user_has_admin_access(
+            user
+        )
     ):
         return jsonify({
             "error": (
@@ -1242,7 +1260,9 @@ def delete_artwork(
     if (
         artwork.artist_id
         != user.id
-        and user.role != "admin"
+        and not user_has_admin_access(
+            user
+        )
     ):
         return jsonify({
             "error": "Not allowed"
