@@ -169,6 +169,13 @@ export default function Navbar() {
 
         <NavLink
           className={navLinkClass}
+          to="/collected"
+        >
+          Collected
+        </NavLink>
+
+        <NavLink
+          className={navLinkClass}
           to="/shop"
         >
           Shop
@@ -392,6 +399,14 @@ export default function Navbar() {
             onClick={closeMenu}
           >
             Exhibitions
+          </NavLink>
+
+          <NavLink
+            className={navLinkClass}
+            to="/collected"
+            onClick={closeMenu}
+          >
+            Collected
           </NavLink>
 
           <NavLink

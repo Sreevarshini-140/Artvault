@@ -792,25 +792,48 @@ export default function ArtworkDetail() {
           </div>
 
 
-          <div className="detail-actions">
-            <button
-              type="button"
-              className="detail-primary-button"
-              onClick={acquire}
-            >
-              <ShoppingBag size={18} />
+          {artwork.status?.toLowerCase() === "sold" ? (
+            <div className="detail-collected-panel">
+              <div>
+                <span className="detail-collected-label">
+                  Collected
+                </span>
 
-              Acquire Artwork
-            </button>
+                <p>
+                  This original artwork has found
+                  its collector.
+                </p>
+              </div>
 
-            <button
-              type="button"
-              className="detail-secondary-button"
-              onClick={save}
-            >
-              ♡ Wishlist
-            </button>
-          </div>
+              <button
+                type="button"
+                className="detail-primary-button"
+                onClick={() => navigate("/collected")}
+              >
+                View Collected Works
+              </button>
+            </div>
+          ) : (
+            <div className="detail-actions">
+              <button
+                type="button"
+                className="detail-primary-button"
+                onClick={acquire}
+              >
+                <ShoppingBag size={18} />
+
+                Acquire Artwork
+              </button>
+
+              <button
+                type="button"
+                className="detail-secondary-button"
+                onClick={save}
+              >
+                ♡ Wishlist
+              </button>
+            </div>
+          )}
 
 
           {message && (

@@ -6,7 +6,13 @@ from flask_jwt_extended import (
 from sqlalchemy.exc import IntegrityError
 
 from app import db
-from app.models import Artwork, Review, User
+from app.models import (
+    Artwork,
+    Order,
+    OrderItem,
+    Review,
+    User,
+)
 
 
 reviews_bp = Blueprint(
@@ -92,14 +98,44 @@ def create_review():
             "error": "Artwork not found",
         }), 404
 
-    if artwork.status != "published":
+    user_id = int(
+        get_jwt_identity()
+    )
+
+    User.query.get_or_404(
+        user_id
+    )
+
+    purchased_item = (
+        OrderItem.query
+        .join(
+            Order,
+            Order.id
+            == OrderItem.order_id,
+        )
+        .filter(
+            OrderItem.artwork_id
+            == artwork_id,
+            Order.user_id
+            == user_id,
+            Order.status.in_([
+                "paid",
+                "shipped",
+                "delivered",
+            ]),
+        )
+        .first()
+    )
+
+    if purchased_item is None:
         return jsonify({
             "success": False,
             "error": (
-                "Only published artworks "
-                "can be reviewed"
+                "Only verified collectors "
+                "who purchased this artwork "
+                "can leave a review."
             ),
-        }), 400
+        }), 403
 
     rating, rating_error = (
         validate_rating(
@@ -125,14 +161,6 @@ def create_review():
                 "2000 characters"
             ),
         }), 400
-
-    user_id = int(
-        get_jwt_identity()
-    )
-
-    User.query.get_or_404(
-        user_id
-    )
 
     existing_review = (
         Review.query.filter_by(

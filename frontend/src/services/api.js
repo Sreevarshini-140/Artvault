@@ -21,6 +21,7 @@ const api = axios.create({
 */
 const PUBLIC_GET_EXACT_ROUTES = [
   "/artworks",
+  "/artworks/collected",
   "/artists",
   "/users/artists",
   "/categories",

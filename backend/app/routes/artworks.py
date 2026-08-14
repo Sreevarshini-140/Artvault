@@ -15,7 +15,13 @@ from sqlalchemy import or_
 from werkzeug.utils import secure_filename
 
 from app import db
-from app.models import Artwork, User
+from app.models import (
+    Artwork,
+    Order,
+    OrderItem,
+    Review,
+    User,
+)
 from app.utils.auth import roles_required
 
 
@@ -110,6 +116,97 @@ def serialize_artwork(
         )
 
     return payload
+
+
+@artworks_bp.get("/collected")
+def list_collected_artworks():
+    """
+    Public archive of artworks that have been collected.
+
+    Uses the existing artworks, orders, order_items and
+    reviews tables. No new database table is required.
+    """
+
+    sold_records = (
+        db.session.query(
+            Artwork,
+            OrderItem,
+            Order,
+        )
+        .join(
+            OrderItem,
+            OrderItem.artwork_id == Artwork.id,
+        )
+        .join(
+            Order,
+            Order.id == OrderItem.order_id,
+        )
+        .filter(
+            Artwork.status == "sold",
+            Order.status.in_([
+                "paid",
+                "shipped",
+                "delivered",
+            ]),
+        )
+        .order_by(
+            Order.created_at.desc(),
+            Artwork.id.desc(),
+        )
+        .all()
+    )
+
+    items = []
+
+    for artwork, order_item, order in sold_records:
+        artwork_data = serialize_artwork(
+            artwork
+        )
+
+        reviews = (
+            Review.query
+            .filter_by(
+                artwork_id=artwork.id
+            )
+            .order_by(
+                Review.created_at.desc()
+            )
+            .all()
+        )
+
+        artwork_data["sale"] = {
+            "sold_price": float(
+                order_item.unit_price
+            ),
+            "sold_at": (
+                order.created_at.isoformat()
+                if order.created_at
+                else None
+            ),
+            "order_status": (
+                order.status
+            ),
+        }
+
+        artwork_data["reviews"] = [
+            review.to_dict()
+            for review in reviews
+        ]
+
+        artwork_data[
+            "verified_review_count"
+        ] = len(reviews)
+
+        items.append(
+            artwork_data
+        )
+
+    return jsonify({
+        "success": True,
+        "items": items,
+        "total": len(items),
+    }), 200
+
 
 
 @artworks_bp.get("")

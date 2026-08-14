@@ -1738,3 +1738,58 @@ textarea:focus-visible {
       0.01ms !important;
   }
 }
+/* Sold / collected artwork state */
+
+.detail-collected-panel {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+
+  margin-top: 22px;
+  padding: 18px 20px;
+
+  border: 1px solid rgba(212, 175, 55, 0.28);
+  border-radius: 12px;
+
+  background: rgba(212, 175, 55, 0.055);
+}
+
+.detail-collected-label {
+  display: block;
+
+  margin-bottom: 6px;
+
+  color: #d4af37;
+
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+
+.detail-collected-panel p {
+  margin: 0;
+
+  color: var(--muted, #aaa);
+
+  font-size: 0.84rem;
+  line-height: 1.55;
+}
+
+.detail-collected-panel
+.detail-primary-button {
+  flex-shrink: 0;
+}
+
+@media (max-width: 620px) {
+  .detail-collected-panel {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .detail-collected-panel
+  .detail-primary-button {
+    width: 100%;
+  }
+}

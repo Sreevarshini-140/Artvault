@@ -21,6 +21,7 @@ import ArtistProfile from "./pages/ArtistProfile";
 import Exhibitions from "./pages/Exhibitions";
 import ExhibitionDetail from "./pages/ExhibitionDetail";
 import ManageExhibitions from "./pages/ManageExhibitions";
+import CollectedArtworks from "./pages/CollectedArtworks";
 import Shop from "./pages/Shop";
 import Cart from "./pages/Cart";
 import Checkout from "./pages/Checkout";
@@ -102,6 +103,11 @@ export default function App() {
           <Route
             path="/exhibitions/:slug"
             element={<ExhibitionDetail />}
+          />
+
+          <Route
+            path="/collected"
+            element={<CollectedArtworks />}
           />
 
           <Route
