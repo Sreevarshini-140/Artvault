@@ -1093,3 +1093,257 @@ def artist_dashboard():
             for notification in notifications
         ],
     }), 200
+
+
+# =========================================================
+# Visitor / Collector Dashboard
+# =========================================================
+
+def _collector_dashboard_response():
+    user_id = int(get_jwt_identity())
+
+    user = User.query.get_or_404(user_id)
+
+    completed_statuses = {
+        "paid",
+        "shipped",
+        "delivered",
+    }
+
+    orders = (
+        Order.query
+        .filter_by(user_id=user_id)
+        .order_by(Order.created_at.desc())
+        .all()
+    )
+
+    completed_orders = [
+        order
+        for order in orders
+        if order.status in completed_statuses
+    ]
+
+    total_orders = len(completed_orders)
+
+    total_spent = sum(
+        _money(order.total_amount)
+        for order in completed_orders
+    )
+
+    wishlist_items = (
+        Wishlist.query
+        .filter_by(user_id=user_id)
+        .count()
+    )
+
+    artists_followed = (
+        Follow.query
+        .filter_by(follower_id=user_id)
+        .count()
+    )
+
+    unread_notifications = (
+        Notification.query
+        .filter_by(
+            user_id=user_id,
+            is_read=False,
+        )
+        .count()
+    )
+
+    # ---------------------------------------------
+    # Spending overview
+    # ---------------------------------------------
+
+    month_names = [
+        "Jan",
+        "Feb",
+        "Mar",
+        "Apr",
+        "May",
+        "Jun",
+        "Jul",
+        "Aug",
+        "Sep",
+        "Oct",
+        "Nov",
+        "Dec",
+    ]
+
+    monthly_totals = {
+        month: 0.0
+        for month in month_names
+    }
+
+    for order in completed_orders:
+        if not order.created_at:
+            continue
+
+        month = month_names[
+            order.created_at.month - 1
+        ]
+
+        monthly_totals[month] += _money(
+            order.total_amount
+        )
+
+    monthly_spending = [
+        {
+            "month": month,
+            "amount": round(
+                monthly_totals[month],
+                2,
+            ),
+        }
+        for month in month_names
+    ]
+
+    # ---------------------------------------------
+    # Recent orders
+    # ---------------------------------------------
+
+    recent_orders = []
+
+    for order in orders[:5]:
+        artwork = None
+
+        if order.items:
+            artwork = order.items[0].artwork
+
+        recent_orders.append({
+            "id": order.id,
+            "order_id": order.id,
+            "status": order.status,
+            "total_amount": _money(
+                order.total_amount
+            ),
+            "created_at": _iso(
+                order.created_at
+            ),
+            "artwork": (
+                {
+                    "id": artwork.id,
+                    "title": artwork.title,
+                    "image_url": (
+                        artwork.image_url
+                    ),
+                }
+                if artwork
+                else None
+            ),
+        })
+
+    # ---------------------------------------------
+    # Recommended artworks
+    # ---------------------------------------------
+
+    purchased_ids = {
+        item.artwork_id
+        for order in completed_orders
+        for item in order.items
+        if item.artwork_id
+    }
+
+    recommendation_query = (
+        Artwork.query
+        .filter(
+            Artwork.status == "published"
+        )
+    )
+
+    if purchased_ids:
+        recommendation_query = (
+            recommendation_query.filter(
+                ~Artwork.id.in_(
+                    purchased_ids
+                )
+            )
+        )
+
+    recommended = (
+        recommendation_query
+        .order_by(
+            Artwork.views.desc(),
+            Artwork.created_at.desc(),
+        )
+        .limit(4)
+        .all()
+    )
+
+    recommended_artworks = [
+        {
+            "id": artwork.id,
+            "title": artwork.title,
+            "category": artwork.category,
+            "medium": artwork.medium,
+            "year": artwork.year,
+            "price": _money(
+                artwork.price
+            ),
+            "image_url": artwork.image_url,
+            "views": artwork.views or 0,
+            "average_rating": (
+                artwork.average_rating
+            ),
+            "artist": (
+                {
+                    "id": artwork.artist.id,
+                    "name": artwork.artist.name,
+                }
+                if artwork.artist
+                else None
+            ),
+        }
+        for artwork in recommended
+    ]
+
+    return jsonify({
+        "user": {
+            "id": user.id,
+            "name": user.name,
+            "email": user.email,
+            "role": user.role,
+            "avatar_url": user.avatar_url,
+        },
+        "stats": {
+            "total_orders": total_orders,
+            "total_spent": round(
+                total_spent,
+                2,
+            ),
+            "wishlist_items": wishlist_items,
+            "artists_followed": artists_followed,
+            "unread_notifications": (
+                unread_notifications
+            ),
+            "unread_messages": 0,
+            "cart_items": 0,
+        },
+        "monthly_spending": monthly_spending,
+        "recent_orders": recent_orders,
+        "recommended_artworks": (
+            recommended_artworks
+        ),
+    }), 200
+
+
+@dashboard_bp.get("/visitor")
+@roles_required(
+    "visitor",
+    "collector",
+    "customer",
+    "admin",
+)
+def visitor_dashboard():
+    return _collector_dashboard_response()
+
+
+@dashboard_bp.get("/collector")
+@roles_required(
+    "visitor",
+    "collector",
+    "customer",
+    "admin",
+)
+def collector_dashboard():
+    return _collector_dashboard_response()
